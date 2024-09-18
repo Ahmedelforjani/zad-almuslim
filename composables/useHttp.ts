@@ -23,7 +23,6 @@ export function useHttp() {
 
     return $fetch<T>(url, {
       baseURL: config.public.apiUrl,
-      credentials: "same-origin",
       headers: {
         Accept: "application/json",
       },
