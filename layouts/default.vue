@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 useHead({
+  title: "زاد المسلم",
   script: [
     {
       src: "https://w.soundcloud.com/player/api.js",
