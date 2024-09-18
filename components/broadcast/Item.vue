@@ -1,0 +1,50 @@
+<script setup lang="ts">
+import type { Broadcast } from "~/types/model";
+
+const playerStore = usePlayerStore();
+const props = defineProps<{ item: Broadcast }>();
+
+defineEmits<{ play: [Broadcast] }>();
+
+const play = () => {
+  playerStore.track = {
+    id: props.item.id,
+    name: props.item.name,
+    image: props.item.image,
+    url: props.item.url,
+    type: "broadcast",
+  };
+};
+</script>
+<template>
+  <div
+    class="space-y-3 transition-all duration-300 border rounded-md group hover:shadow-lg"
+  >
+    <div class="relative overflow-hidden">
+      <img
+        :src="item.image"
+        :alt="item.name"
+        class="object-cover w-full h-40 transition-all"
+      />
+      <Button
+        size="icon"
+        class="absolute transition-all duration-300 rounded-full opacity-100 lg:bottom-0 lg:opacity-0 bottom-2 left-2 group-hover:bottom-2 group-hover:opacity-100"
+        @click="play"
+      >
+        <Icon
+          name="lucide:play"
+          mode="svg"
+          class="[&>path]:fill-black h-5 w-5"
+        />
+      </Button>
+    </div>
+    <div class="px-4 py-4 space-y-1 text-sm">
+      <h3 class="font-medium leading-none">
+        {{ item.name }}
+      </h3>
+      <p class="text-xs text-muted-foreground">
+        {{ item.categories.map(({ name }) => name).join(", ") }}
+      </p>
+    </div>
+  </div>
+</template>
