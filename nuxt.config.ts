@@ -21,15 +21,15 @@ export default defineNuxtConfig({
     classSuffix: "",
   },
   runtimeConfig: {
-    // public: {
-    //   apiUrl: process.env.NUXT_API_URL,
-    // },
-  },
-  nitro: {
-    routeRules: {
-      "/api/**": {
-        proxy: `${process.env.NUXT_API_URL}/**`,
-      },
+    public: {
+      apiUrl: process.env.NUXT_API_URL,
     },
   },
+  // nitro: {
+  //   routeRules: {
+  //     "/api/**": {
+  //       proxy: `${process.env.NUXT_API_URL}/**`,
+  //     },
+  //   },
+  // },
 });

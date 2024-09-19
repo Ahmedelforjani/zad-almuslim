@@ -11,6 +11,8 @@ export interface Response<T> {
 }
 
 export function useHttp() {
+  const config = useRuntimeConfig();
+
   function request<T, B = Body>(
     url: Url,
     method: HttpMethod,
@@ -20,8 +22,8 @@ export function useHttp() {
     const isFormData = body instanceof FormData;
 
     return $fetch<T>(url, {
-      // baseURL: config.public.apiUrl,
-      baseURL: "/api",
+      baseURL: config.public.apiUrl,
+      // baseURL: "/api",
       headers: {
         Accept: "application/json",
       },
