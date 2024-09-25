@@ -74,7 +74,7 @@
     @apply font-[Rubik] bg-background text-foreground;
   }
 
-  ::-webkit-scrollbar {
+  /* ::-webkit-scrollbar {
     width: 6px;
   }
 
@@ -85,5 +85,5 @@
 
   ::-webkit-scrollbar-track {
     background-color: hsl(var(--background));
-  }
+  } */
 }

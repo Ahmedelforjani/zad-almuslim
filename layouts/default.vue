@@ -1,12 +1,6 @@
 <script lang="ts" setup>
 useHead({
   title: "زاد المسلم",
-  script: [
-    {
-      src: "https://w.soundcloud.com/player/api.js",
-      async: true,
-    },
-  ],
 });
 </script>
 
@@ -16,15 +10,15 @@ useHead({
       <Topbar class="flex-shrink-0" />
       <div class="grid flex-1 overflow-y-auto lg:grid-cols-5">
         <Sidebar />
-        <div class="col-span-3 overflow-y-auto lg:col-span-4 lg:border-l">
-          <div class="px-4 py-12 lg:px-8">
+        <ScrollArea class="col-span-5 lg:col-span-4 lg:border-l">
+          <div class="px-4 pt-6 pb-12 lg:px-8">
             <slot />
           </div>
-        </div>
+        </ScrollArea>
       </div>
-      <PlayerBar />
+      <ClientOnly>
+        <PlayerBar />
+      </ClientOnly>
     </div>
   </Body>
 </template>
-
-<style></style>

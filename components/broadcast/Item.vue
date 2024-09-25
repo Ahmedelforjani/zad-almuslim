@@ -18,7 +18,7 @@ const play = () => {
 </script>
 <template>
   <div
-    class="space-y-3 transition-all duration-300 border rounded-md group hover:shadow-lg"
+    class="space-y-3 overflow-hidden transition-all duration-300 border rounded-md group hover:shadow-lg"
   >
     <div class="relative overflow-hidden">
       <img

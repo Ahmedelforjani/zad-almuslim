@@ -4,11 +4,7 @@ type Url = string;
 type Options = FetchOptions;
 type HttpMethod = "GET" | "HEAD" | "PATCH" | "POST" | "PUT" | "DELETE";
 type Body = Record<string, any> | FormData;
-export interface Response<T> {
-  data: T;
-  message: string;
-  status: number;
-}
+export type Response<T> = T;
 
 export function useHttp() {
   const config = useRuntimeConfig();
@@ -42,11 +38,6 @@ export function useHttp() {
   const get = <T = Record<string, any>>(url: Url, options?: Options) =>
     request<Response<T>>(url, "GET", undefined, options);
 
-  const $get = async <T = Record<string, any>>(url: Url, options?: Options) => {
-    const { data } = await get<T>(url, options);
-    return data;
-  };
-
   const put = <T = Record<string, any>>(
     url: Url,
     body?: Body,
@@ -58,7 +49,6 @@ export function useHttp() {
 
   return {
     get,
-    $get,
     post,
     put,
     delete: del,

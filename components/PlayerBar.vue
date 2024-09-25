@@ -1,18 +1,8 @@
 <script setup lang="ts">
 const { track } = storeToRefs(usePlayerStore());
-const volume = ref(1);
 const trackUrl = computed(() => track.value?.url);
-const soundPlayer = useSound(trackUrl, {
-  autoplay: true,
-  volume,
-});
-const isMuted = computed(() => volume.value === 0);
-const toggle = () =>
-  soundPlayer.isPlaying.value ? soundPlayer.pause() : soundPlayer.play();
 
-const toggleMute = () => {
-  volume.value = isMuted.value ? 1 : 0;
-};
+const audio = ref(useAudio(trackUrl));
 </script>
 
 <template>
@@ -44,14 +34,12 @@ const toggleMute = () => {
           <Button
             size="icon"
             class="rounded-full bg-foreground text-background"
-            :disabled="soundPlayer.isLoading.value"
-            @click="toggle"
+            :disabled="audio.isLoading"
+            @click="audio.togglePlay()"
           >
             <Icon
-              v-if="!soundPlayer.isLoading.value"
-              :name="
-                soundPlayer.isPlaying.value ? 'lucide:pause' : 'lucide:play'
-              "
+              v-if="!audio.isLoading"
+              :name="audio.isPlaying ? 'lucide:pause' : 'lucide:play'"
               mode="svg"
               class="[&>path]:fill-[currentColor] h-5 w-5"
             />
@@ -82,10 +70,10 @@ const toggleMute = () => {
           size="icon"
           variant="ghost"
           class="rounded-full"
-          @click="toggleMute"
+          @click="audio.toggleMute()"
         >
           <Icon
-            :name="isMuted ? 'lucide:volume-x' : 'lucide:volume-2'"
+            :name="audio.isMuted ? 'lucide:volume-x' : 'lucide:volume-2'"
             mode="svg"
             class="[&>path]:fill-[currentColor] h-5 w-5"
           />

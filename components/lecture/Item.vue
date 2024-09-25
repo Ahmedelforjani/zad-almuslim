@@ -2,12 +2,10 @@
 import type { Lecture } from "~/types/model";
 
 defineProps<{ item: Lecture }>();
-defineEmits<{ (e: "play", item: Lecture): void }>();
 </script>
 <template>
   <div
-    class="space-y-3 transition-all duration-300 border rounded-md cursor-pointer hover:shadow-lg hover:scale-105"
-    @click="$emit('play', item)"
+    class="space-y-3 overflow-hidden transition-all duration-300 border rounded-md cursor-pointer hover:shadow-lg hover:scale-105"
   >
     <div class="overflow-hidden rounded-md">
       <img

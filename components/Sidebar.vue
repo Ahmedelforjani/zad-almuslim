@@ -1,24 +1,60 @@
 <script setup lang="ts">
 import { cn } from "@/lib/utils";
 import { Button } from "./ui/button";
-import type { Category } from "~/types/model";
 
-const categories = await useHttp().$get<Category[]>("/categories");
+const themeStore = useThemeStore();
+const route = useRoute();
+
+const items = [
+  { name: "الرئيسية", icon: "lucide:home", to: "/" },
+  { name: "الإذاعات", icon: "lucide:radio", to: "/broadcasts" },
+  { name: "الدروس", icon: "lucide:book", to: "/lectures" },
+];
+
+watch(
+  () => route.path,
+  () => {
+    themeStore.isSidebarOpen = false;
+  }
+);
 </script>
 
 <template>
-  <div :class="cn('pb-12 border-e hidden lg:block', $attrs.class ?? '')">
+  <div
+    v-if="themeStore.isSidebarOpen"
+    class="fixed top-0 left-0 z-20 w-full h-full bg-black/50 lg:hidden"
+    @click="themeStore.isSidebarOpen = false"
+  />
+
+  <div
+    :class="
+      cn(
+        'fixed lg:relative z-30 top-0 right-0 flex flex-col h-screen lg:h-full lg:translate-x-0 w-[312px] bg-background transition-transform duration-300 pb-12 border-e lg:block',
+        $attrs.class ?? '',
+        {
+          'translate-x-[312px]': !themeStore.isSidebarOpen,
+        }
+      )
+    "
+  >
     <div class="py-4 space-y-4">
       <div class="px-3 py-2">
-        <h2 class="px-4 mb-2 text-lg font-semibold tracking-tight">الفئات</h2>
         <div class="space-y-1">
           <Button
-            v-for="category in categories"
-            :key="category.id"
+            v-for="(item, key) in items"
+            :key="key"
             variant="ghost"
-            class="items-center justify-start w-full"
+            :class="
+              cn('items-center justify-start w-full', {
+                'bg-accent text-accent-foreground': route.path === item.to,
+              })
+            "
+            as-child
           >
-            {{ category.name }}
+            <RouterLink :to="item.to">
+              <Icon :name="item.icon" class="me-2" />
+              {{ item.name }}
+            </RouterLink>
           </Button>
         </div>
       </div>
