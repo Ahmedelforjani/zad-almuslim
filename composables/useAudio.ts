@@ -4,7 +4,6 @@ export function useAudio(
   url: Ref<string | undefined> | ComputedRef<string | undefined>
 ) {
   const volume = ref(1);
-  const play = ref(false);
   const isPlaying = ref(false);
   const isLoading = ref(false);
   const player = ref<HTMLAudioElement>();
@@ -29,15 +28,30 @@ export function useAudio(
 
   const onLoadedData = () => {
     isLoading.value = false;
-    if (play.value) {
-      player.value?.play();
-    }
+    play();
+  };
+
+  const play = () => {
+    stopAudioLoadingTimeout.value &&
+      clearTimeout(stopAudioLoadingTimeout.value);
+
+    if (url.value && player.value?.src !== new URL(url.value).href)
+      player.value!.src = url.value;
+
+    player.value?.play();
+  };
+
+  const pause = () => {
+    player.value?.pause();
+    stopAudioLoadingTimeout.value = setTimeout(() => {
+      player.value!.src = "";
+    }, IDLE_TIMEOUT);
   };
 
   watch(url, () => {
     if (url.value) {
       player.value!.src = url.value;
-      play.value = true;
+      play();
     }
   });
 
@@ -45,24 +59,7 @@ export function useAudio(
     player.value!.volume = volume.value;
   });
 
-  watch(play, () => {
-    if (play.value) {
-      stopAudioLoadingTimeout.value &&
-        clearTimeout(stopAudioLoadingTimeout.value);
-
-      if (url.value && player.value?.src !== new URL(url.value).href)
-        player.value!.src = url.value;
-
-      player.value?.play();
-    } else {
-      player.value?.pause();
-      stopAudioLoadingTimeout.value = setTimeout(() => {
-        player.value!.src = "";
-      }, IDLE_TIMEOUT);
-    }
-  });
-
-  const togglePlay = () => (play.value = !play.value);
+  const togglePlay = () => (isPlaying.value ? pause() : play());
   const toggleMute = () => (volume.value = isMuted.value ? 1 : 0);
 
   onMounted(() => {
