@@ -21,6 +21,7 @@
     "howler": "^2.2.4",
     "nuxt": "^3.13.0",
     "pinia": "^2.2.2",
+    "pinia-plugin-persistedstate": "^4.0.2",
     "radix-vue": "^1.9.5",
     "shadcn-nuxt": "^0.10.4",
     "tailwind-merge": "^2.5.2",

@@ -1,8 +1,10 @@
 const IDLE_TIMEOUT = 10_000;
 
-export function useAudio(url: Ref<string | null> | ComputedRef<string | null>) {
+export function useAudio(
+  url: Ref<string | undefined> | ComputedRef<string | undefined>
+) {
   const volume = ref(1);
-  const play = ref(true);
+  const play = ref(false);
   const isPlaying = ref(false);
   const isLoading = ref(false);
   const player = ref<HTMLAudioElement>();
