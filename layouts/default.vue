@@ -6,7 +6,7 @@ useHead({
 
 <template>
   <Body dir="rtl">
-    <div class="flex flex-col h-screen">
+    <div class="flex flex-col h-dvh">
       <Topbar class="flex-shrink-0" />
       <div class="grid flex-1 overflow-y-auto lg:grid-cols-5">
         <Sidebar />
