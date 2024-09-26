@@ -34,29 +34,28 @@ const route = useRoute();
         v-if="pagination && pagination.last_page > 1"
         v-slot="{ page }"
         :total="pagination.total"
-        :sibling-count="1"
+        :sibling-count="2"
         :page="pagination.current"
         :items-per-page="pagination.per_page"
-        show-edges
-        :default-page="2"
+        :default-page="1"
       >
         <PaginationList v-slot="{ items }" class="flex items-center gap-1">
-          <RouterLink
+          <NuxtLink
             v-if="page > 1"
             :to="{ query: { ...route.query, page: 1 } }"
           >
             <PaginationFirst>
               <Icon name="lucide:chevrons-right" />
             </PaginationFirst>
-          </RouterLink>
-          <RouterLink
+          </NuxtLink>
+          <!-- <NuxtLink
             v-if="page > 1"
             :to="{ query: { ...route.query, page: pagination.current - 1 } }"
-          >
+          > 
             <PaginationPrev>
               <Icon name="lucide:chevron-right" />
             </PaginationPrev>
-          </RouterLink>
+          </NuxtLink> -->
 
           <template v-for="(item, index) in items">
             <PaginationListItem
@@ -72,32 +71,30 @@ const route = useRoute();
                 "
                 as-child
               >
-                <RouterLink
-                  :to="{ query: { ...route.query, page: item.value } }"
-                >
+                <NuxtLink :to="{ query: { ...route.query, page: item.value } }">
                   {{ item.value }}
-                </RouterLink>
+                </NuxtLink>
               </Button>
             </PaginationListItem>
             <PaginationEllipsis v-else :key="item.type" :index="index" />
           </template>
 
-          <RouterLink
+          <!-- <NuxtLink
             v-if="page < pagination.last_page"
             :to="{ query: { ...route.query, page: pagination.current + 1 } }"
           >
             <PaginationLast>
               <Icon name="lucide:chevron-left" />
             </PaginationLast>
-          </RouterLink>
-          <RouterLink
+          </NuxtLink> -->
+          <NuxtLink
             v-if="page < pagination.last_page"
             :to="{ query: { ...route.query, page: pagination.last_page } }"
           >
             <PaginationLast>
               <Icon name="lucide:chevrons-left" />
             </PaginationLast>
-          </RouterLink>
+          </NuxtLink>
         </PaginationList>
       </Pagination>
     </div>

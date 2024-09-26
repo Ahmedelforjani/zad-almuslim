@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { Separator } from "@/components/ui/separator";
 import type { Broadcast, Lecture, Pagination } from "~/types/model";
 
 const [{ data: broadcasts }, { data: lectures }] = await Promise.all([
@@ -17,20 +16,20 @@ const [{ data: broadcasts }, { data: lectures }] = await Promise.all([
           الإذاعات
         </h2>
       </div>
-      <RouterLink
+      <NuxtLink
         to="/broadcasts"
         class="flex items-center text-sm transition-all hover:text-primary"
       >
         <span>عرض الكل</span>
         <Icon name="lucide:chevron-left" class="ms-2" />
-      </RouterLink>
+      </NuxtLink>
     </div>
-    <Separator class="my-4" />
-    <GridView v-if="broadcasts" :data="broadcasts.data">
-      <template #item="{ value }">
-        <BroadcastItem :item="value" />
+    <Separator class="mt-4" />
+    <CarouselList v-if="broadcasts" :data="broadcasts.data">
+      <template #item="{ item }">
+        <BroadcastItem :item="item" class="h-full" />
       </template>
-    </GridView>
+    </CarouselList>
     <div class="flex items-center justify-between mt-6">
       <div class="space-y-1">
         <h2 class="text-2xl font-semibold tracking-tight">
@@ -38,20 +37,20 @@ const [{ data: broadcasts }, { data: lectures }] = await Promise.all([
           الدروس
         </h2>
       </div>
-      <RouterLink
+      <NuxtLink
         to="/lectures"
         class="flex items-center text-sm transition-all hover:text-primary"
       >
         <span>عرض الكل</span>
         <Icon name="lucide:chevron-left" class="ms-2" />
-      </RouterLink>
+      </NuxtLink>
     </div>
 
-    <Separator class="my-4" />
-    <GridView v-if="lectures" :data="lectures.data">
-      <template #item="{ value }">
-        <LectureItem :item="value" />
+    <Separator class="mt-4" />
+    <CarouselList v-if="lectures" :data="lectures.data">
+      <template #item="{ item }">
+        <LectureItem :item="item" class="h-full" />
       </template>
-    </GridView>
+    </CarouselList>
   </div>
 </template>

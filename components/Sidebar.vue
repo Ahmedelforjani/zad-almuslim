@@ -29,7 +29,7 @@ watch(
   <div
     :class="
       cn(
-        'fixed lg:relative z-30 top-0 right-0 flex flex-col h-screen lg:h-full lg:translate-x-0 w-[312px] bg-background transition-transform duration-300 pb-12 border-e lg:block',
+        'fixed overflow-y-auto lg:relative z-30 top-0 right-0 flex flex-col h-screen lg:h-full lg:translate-x-0 flex-shrink-0 w-[312px] bg-background transition-transform duration-300 pb-12 border-e lg:block',
         $attrs.class ?? '',
         {
           'translate-x-[312px]': !themeStore.isSidebarOpen,
@@ -51,10 +51,10 @@ watch(
             "
             as-child
           >
-            <RouterLink :to="item.to">
+            <NuxtLink :to="item.to">
               <Icon :name="item.icon" class="me-2" />
               {{ item.name }}
-            </RouterLink>
+            </NuxtLink>
           </Button>
         </div>
       </div>

@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import { ConfigProvider } from "radix-vue";
+
 useHead({
   title: "زاد المسلم",
 });
@@ -6,19 +8,21 @@ useHead({
 
 <template>
   <Body dir="rtl">
-    <div class="flex flex-col h-dvh">
-      <Topbar class="flex-shrink-0" />
-      <div class="grid flex-1 overflow-y-auto lg:grid-cols-5">
-        <Sidebar />
-        <ScrollArea class="col-span-5 lg:col-span-4 lg:border-l">
-          <div class="px-4 pt-6 pb-12 lg:px-8">
-            <slot />
-          </div>
-        </ScrollArea>
+    <ConfigProvider dir="rtl">
+      <div class="flex flex-col h-dvh">
+        <Topbar class="flex-shrink-0" />
+        <div class="flex flex-1 overflow-y-auto">
+          <Sidebar />
+          <ScrollArea class="flex-1 lg:border-l">
+            <div class="px-4 pt-6 pb-12 lg:px-8">
+              <slot />
+            </div>
+          </ScrollArea>
+        </div>
+        <ClientOnly>
+          <PlayerBar />
+        </ClientOnly>
       </div>
-      <ClientOnly>
-        <PlayerBar />
-      </ClientOnly>
-    </div>
+    </ConfigProvider>
   </Body>
 </template>

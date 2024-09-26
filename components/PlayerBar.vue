@@ -6,7 +6,7 @@ const audio = ref(useAudio(trackUrl));
 </script>
 
 <template>
-  <div v-if="track" class="w-full px-6 py-6 border-t bg-background">
+  <div v-if="track" class="w-full px-6 py-2 border-t lg:py-4 bg-background">
     <div class="flex items-center gap-2 lg:gap-6 lg:grid lg:grid-cols-3">
       <div class="flex items-center gap-2">
         <img
@@ -41,7 +41,7 @@ const audio = ref(useAudio(trackUrl));
               v-if="!audio.isLoading"
               :name="audio.isPlaying ? 'lucide:pause' : 'lucide:play'"
               mode="svg"
-              class="[&>path]:fill-[currentColor] h-5 w-5"
+              class="[&>path]:fill-current [&>g]:fill-current h-5 w-5"
             />
             <Icon
               v-else
@@ -58,7 +58,7 @@ const audio = ref(useAudio(trackUrl));
             <Icon
               name="lucide:skip-back"
               mode="svg"
-              class="[&>path]:fill-[currentColor] h-5 w-5"
+              class="[&>path]:fill-current h-5 w-5"
             />
           </Button>
         </div>

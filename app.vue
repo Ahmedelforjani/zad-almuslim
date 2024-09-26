@@ -1,13 +1,9 @@
-<script setup lang="ts">
-import { ConfigProvider } from "radix-vue";
-</script>
+<script setup lang="ts"></script>
 
 <template>
-  <ConfigProvider dir="rtl">
-    <NuxtLoadingIndicator color="hsl(var(--primary))" />
+  <NuxtLoadingIndicator color="hsl(var(--primary))" />
 
-    <NuxtLayout>
-      <NuxtPage :page-key="(route) => route.fullPath" />
-    </NuxtLayout>
-  </ConfigProvider>
+  <NuxtLayout>
+    <NuxtPage :page-key="(route) => route.fullPath" :transition="true" />
+  </NuxtLayout>
 </template>

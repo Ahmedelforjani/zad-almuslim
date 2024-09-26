@@ -5,7 +5,7 @@ defineProps<{ item: Lecture }>();
 </script>
 <template>
   <div
-    class="space-y-3 overflow-hidden transition-all duration-300 border rounded-md cursor-pointer hover:shadow-lg hover:scale-105"
+    class="space-y-3 overflow-hidden transition-all duration-300 border rounded-md cursor-pointer hover:shadow-lg"
   >
     <div class="overflow-hidden rounded-md">
       <img

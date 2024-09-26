@@ -34,7 +34,7 @@ const play = () => {
         <Icon
           name="lucide:play"
           mode="svg"
-          class="[&>path]:fill-black h-5 w-5"
+          class="[&>path]:fill-primary-foreground h-5 w-5"
         />
       </Button>
     </div>

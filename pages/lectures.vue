@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { Separator } from "@/components/ui/separator";
 import type { Lecture, Pagination } from "~/types/model";
 
 const route = useRoute();
@@ -23,7 +22,7 @@ const { data: lectures, status } = await useAsyncData(
           الدروس
         </h2>
       </div>
-      <BackButton />
+      <BackButton to="/" />
     </div>
     <Separator class="my-4" />
     <GridView
