@@ -1,8 +1,17 @@
 <script setup lang="ts">
-const { track } = storeToRefs(usePlayerStore());
-const trackUrl = computed(() => track.value?.url);
+const playerStore = usePlayerStore();
+const { track } = storeToRefs(playerStore);
+const { audio } = playerStore;
 
-const audio = ref(useAudio(trackUrl));
+onMounted(() => {
+  if (!import.meta.client) return;
+
+  playerStore.loadAudio();
+});
+
+onUnmounted(() => {
+  playerStore.unloadAudio();
+});
 </script>
 
 <template>
@@ -34,12 +43,12 @@ const audio = ref(useAudio(trackUrl));
           <Button
             size="icon"
             class="rounded-full bg-foreground text-background"
-            :disabled="audio.isLoading"
-            @click="audio.togglePlay()"
+            :disabled="audio.waiting"
+            @click="audio.playing = !audio.playing"
           >
             <Icon
-              v-if="!audio.isLoading"
-              :name="audio.isPlaying ? 'lucide:pause' : 'lucide:play'"
+              v-if="!audio.waiting"
+              :name="audio.playing ? 'lucide:pause' : 'lucide:play'"
               mode="svg"
               class="[&>path]:fill-current [&>g]:fill-current h-5 w-5"
             />
@@ -70,10 +79,10 @@ const audio = ref(useAudio(trackUrl));
           size="icon"
           variant="ghost"
           class="rounded-full"
-          @click="audio.toggleMute()"
+          @click="audio.muted = !audio.muted"
         >
           <Icon
-            :name="audio.isMuted ? 'lucide:volume-x' : 'lucide:volume-2'"
+            :name="audio.muted ? 'lucide:volume-x' : 'lucide:volume-2'"
             mode="svg"
             class="[&>path]:fill-[currentColor] h-5 w-5"
           />

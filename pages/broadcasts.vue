@@ -2,6 +2,7 @@
 import type { Broadcast, Pagination } from "~/types/model";
 
 const route = useRoute();
+
 const routeQuery = computed(() => route.query);
 const { data: broadcasts, status } = await useAsyncData(
   "broadcasts",
@@ -26,7 +27,7 @@ const { data: broadcasts, status } = await useAsyncData(
     </div>
     <Separator class="my-4" />
     <GridView
-      v-if="broadcasts"
+      v-if="broadcasts?.data"
       :data="broadcasts.data"
       :pagination="broadcasts.meta"
       :is-loading="status === 'pending'"

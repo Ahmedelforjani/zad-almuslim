@@ -6,9 +6,22 @@ export const usePlayerStore = defineStore(
   () => {
     const track = ref<Track | undefined>(undefined);
 
-    return { track };
+    const audioElement = ref<HTMLAudioElement | undefined>();
+    const src = computed(() => track.value?.url || "");
+    const audio = useAudio(audioElement, { src });
+
+    const loadAudio = () => {
+      audioElement.value = new Audio();
+      audioElement.value.autoplay = true;
+    };
+
+    const unloadAudio = () => (audioElement.value = undefined);
+
+    return { track, audio, loadAudio, unloadAudio };
   },
   {
-    persist: true,
+    persist: {
+      pick: ["track"],
+    },
   }
 );

@@ -38,6 +38,11 @@ export function useHttp() {
   const get = <T = Record<string, any>>(url: Url, options?: Options) =>
     request<Response<T>>(url, "GET", undefined, options);
 
+  const $get = async <T = Record<string, any>>(url: Url, options?: Options) => {
+    const { data } = await get<{ data: T }>(url, options);
+    return data;
+  };
+
   const put = <T = Record<string, any>>(
     url: Url,
     body?: Body,
@@ -49,6 +54,7 @@ export function useHttp() {
 
   return {
     get,
+    $get,
     post,
     put,
     delete: del,

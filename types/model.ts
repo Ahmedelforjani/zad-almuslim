@@ -45,3 +45,14 @@ export type Lecture = {
   image: string;
   categories: Category[];
 };
+
+export type LectureItems = {
+  id: number;
+  name: string;
+  url: string;
+  image: string;
+};
+
+export type LectureWithItems = Lecture & {
+  items: LectureItems[];
+};

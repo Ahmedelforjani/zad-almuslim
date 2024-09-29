@@ -4,8 +4,9 @@ import type { Lecture } from "~/types/model";
 defineProps<{ item: Lecture }>();
 </script>
 <template>
-  <div
-    class="space-y-3 overflow-hidden transition-all duration-300 border rounded-md cursor-pointer hover:shadow-lg"
+  <NuxtLink
+    :to="`/lectures/${item.id}`"
+    class="block space-y-3 overflow-hidden transition-all duration-300 border rounded-md cursor-pointer hover:shadow-lg"
   >
     <div class="overflow-hidden rounded-md">
       <img
@@ -22,5 +23,5 @@ defineProps<{ item: Lecture }>();
         {{ item.categories.map(({ name }) => name).join(", ") }}
       </p>
     </div>
-  </div>
+  </NuxtLink>
 </template>

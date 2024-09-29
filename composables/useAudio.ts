@@ -1,93 +1,178 @@
 const IDLE_TIMEOUT = 10_000;
 
+type Options = {
+  src: Ref<string | undefined> | ComputedRef<string | undefined>;
+};
+
 export function useAudio(
-  url: Ref<string | undefined> | ComputedRef<string | undefined>
+  target: Ref<HTMLAudioElement | undefined>,
+  { src }: Options
 ) {
   const volume = ref(1);
-  const isPlaying = ref(false);
-  const isLoading = ref(false);
-  const player = ref<HTMLAudioElement>();
+  const playing = ref(false);
+  const waiting = ref(false);
+  const rate = ref(1);
+  const seeking = ref(false);
+  const ended = ref(false);
+  const muted = ref(false);
+  const stalled = ref(false);
+  const currentTime = ref(0);
+  const duration = ref(0);
+  const buffered = ref<[number, number][]>([]);
 
-  const isMuted = computed(() => volume.value === 0);
   const stopAudioLoadingTimeout = ref<NodeJS.Timeout | undefined>();
 
-  const onPlay = () => (isPlaying.value = true);
-  const onPause = () => (isPlaying.value = false);
-  const onLoadStart = () => {
-    if (
-      url.value &&
-      player.value?.src &&
-      player.value.src === new URL(url.value).href
+  function timeRangeToArray(timeRanges: TimeRanges) {
+    let ranges: [number, number][] = [];
+
+    for (let i = 0; i < timeRanges.length; ++i)
+      ranges = [...ranges, [timeRanges.start(i), timeRanges.end(i)]];
+
+    return ranges;
+  }
+
+  watchEffect(() => {
+    if (!document) return;
+
+    const el = toValue(target);
+    if (!el || !toValue(src)) return;
+
+    // Finally, load the new sources.
+    el.load();
+  });
+
+  // Remove source error listeners
+  tryOnScopeDispose(() => {
+    const el = toValue(target);
+    if (!el) return;
+  });
+
+  watch([target, volume], () => {
+    const el = toValue(target);
+    if (!el) return;
+
+    el.volume = volume.value;
+  });
+
+  watch([target, muted], () => {
+    const el = toValue(target);
+    if (!el) return;
+
+    el.muted = muted.value;
+  });
+
+  watch([target, rate], () => {
+    const el = toValue(target);
+    if (!el) return;
+
+    el.playbackRate = rate.value;
+  });
+
+  const { ignoreUpdates: ignoreCurrentTimeUpdates } = watchIgnorable(
+    currentTime,
+    (time) => {
+      const el = toValue(target);
+      if (!el) return;
+
+      el.currentTime = time;
+    }
+  );
+
+  const { ignoreUpdates: ignorePlayingUpdates } = watchIgnorable(
+    playing,
+    (isPlaying) => {
+      const el = toValue(target);
+      if (!el) return;
+
+      if (isPlaying) {
+        stopAudioLoadingTimeout.value &&
+          clearTimeout(stopAudioLoadingTimeout.value);
+
+        if (src.value && el.src !== new URL(src.value).href) el.src = src.value;
+
+        el.play();
+      } else {
+        el.pause();
+        stopAudioLoadingTimeout.value = setTimeout(() => {
+          el.src = "";
+        }, IDLE_TIMEOUT);
+      }
+    }
+  );
+
+  watch(src, () => {
+    const el = toValue(target);
+    if (!el) return;
+
+    if (src.value) {
+      el.src = src.value;
+
+      playing.value = true;
+    }
+  });
+
+  useEventListener(target, "timeupdate", () =>
+    ignoreCurrentTimeUpdates(
+      () => (currentTime.value = toValue(target)!.currentTime)
     )
-      isLoading.value = true;
-    else {
-      isLoading.value = false;
-      isPlaying.value = false;
+  );
+  useEventListener(
+    target,
+    "durationchange",
+    () => (duration.value = toValue(target)!.duration)
+  );
+  useEventListener(
+    target,
+    "progress",
+    () => (buffered.value = timeRangeToArray(toValue(target)!.buffered))
+  );
+  useEventListener(target, "seeking", () => (seeking.value = true));
+  useEventListener(target, "seeked", () => (seeking.value = false));
+
+  useEventListener(target, "play", () => (playing.value = true));
+  useEventListener(target, "pause", () => (playing.value = false));
+  useEventListener(target, "loadstart", () => {
+    const el = toValue(target);
+    if (src.value && el?.src && el.src === new URL(src.value).href) {
+      waiting.value = true;
+    } else {
+      waiting.value = false;
     }
-  };
-
-  const onLoadedData = () => {
-    isLoading.value = false;
-    play();
-  };
-
-  const play = () => {
-    stopAudioLoadingTimeout.value &&
-      clearTimeout(stopAudioLoadingTimeout.value);
-
-    if (url.value && player.value?.src !== new URL(url.value).href)
-      player.value!.src = url.value;
-
-    player.value?.play();
-  };
-
-  const pause = () => {
-    player.value?.pause();
-    stopAudioLoadingTimeout.value = setTimeout(() => {
-      player.value!.src = "";
-    }, IDLE_TIMEOUT);
-  };
-
-  watch(url, () => {
-    if (url.value) {
-      player.value!.src = url.value;
-      play();
-    }
+    ignorePlayingUpdates(() => (playing.value = false));
   });
-
-  watch(volume, () => {
-    player.value!.volume = volume.value;
+  useEventListener(target, "loadeddata", () => (waiting.value = false));
+  useEventListener(target, "playing", () => {
+    waiting.value = false;
+    ended.value = false;
+    ignorePlayingUpdates(() => (playing.value = true));
   });
+  useEventListener(
+    target,
+    "ratechange",
+    () => (rate.value = toValue(target)!.playbackRate)
+  );
+  useEventListener(target, "stalled", () => (stalled.value = true));
+  useEventListener(target, "ended", () => (ended.value = true));
+  useEventListener(target, "pause", () =>
+    ignorePlayingUpdates(() => (playing.value = false))
+  );
+  useEventListener(target, "play", () =>
+    ignorePlayingUpdates(() => (playing.value = true))
+  );
 
-  const togglePlay = () => (isPlaying.value ? pause() : play());
-  const toggleMute = () => (volume.value = isMuted.value ? 1 : 0);
+  useEventListener(target, "volumechange", () => {
+    const el = toValue(target);
+    if (!el) return;
 
-  onMounted(() => {
-    if (!import.meta.client) return;
-    player.value = new Audio();
-    player.value.volume = volume.value;
-    player.value.addEventListener("play", onPlay);
-    player.value.addEventListener("pause", onPause);
-    player.value.addEventListener("loadstart", onLoadStart);
-    player.value.addEventListener("loadeddata", onLoadedData);
-  });
-
-  onUnmounted(() => {
-    if (!player.value) return;
-    player.value.src = "";
-    player.value.removeEventListener("play", onPlay);
-    player.value.removeEventListener("pause", onPause);
-    player.value.removeEventListener("loadstart", onLoadStart);
-    player.value.removeEventListener("loadeddata", onLoadedData);
+    volume.value = el.volume;
+    muted.value = el.muted;
   });
 
   return {
-    isLoading,
-    isMuted,
-    isPlaying,
-    player,
+    waiting,
+    muted,
+    playing,
+    target,
     volume,
-    toggleMute,
-    togglePlay,
-  } as const;
+  };
 }

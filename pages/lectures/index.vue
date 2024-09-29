@@ -26,7 +26,7 @@ const { data: lectures, status } = await useAsyncData(
     </div>
     <Separator class="my-4" />
     <GridView
-      v-if="lectures"
+      v-if="lectures?.data"
       :data="lectures.data"
       :pagination="lectures.meta"
       :is-loading="status === 'pending'"
