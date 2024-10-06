@@ -108,6 +108,7 @@ export function useAudio(
       el.src = src.value;
 
       playing.value = true;
+      el.autoplay = true;
     }
   });
 
@@ -138,7 +139,7 @@ export function useAudio(
     } else {
       waiting.value = false;
     }
-    ignorePlayingUpdates(() => (playing.value = false));
+    // ignorePlayingUpdates(() => (playing.value = false));
   });
   useEventListener(target, "loadeddata", () => (waiting.value = false));
   useEventListener(target, "playing", () => {

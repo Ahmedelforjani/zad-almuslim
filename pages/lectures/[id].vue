@@ -1,14 +1,51 @@
 <script setup lang="ts">
+import { sleep } from "~/lib/utils";
 import type { LectureWithItems } from "~/types/model";
 
+declare namespace window {
+  const SC: any;
+}
+
+useHead({
+  script: [{ src: "https://w.soundcloud.com/player/api.js" }],
+});
+
+const player = usePlayerStore();
 const route = useRoute();
 const id = computed(() => route.params.id);
 const activeItem = ref<string | string[]>();
+let widget: any = undefined;
 
 const { data: lecture } = await useAsyncData(
   "lectures",
   () => useHttp().$get<LectureWithItems>(`/lectures/${id.value}`),
   { watch: [id] }
+);
+
+watch(activeItem, async () => {
+  if (!import.meta.client) return;
+
+  await sleep(500);
+
+  const iframeElement = document.querySelector(`iframe`);
+
+  if (!iframeElement) return;
+
+  widget = window.SC.Widget(iframeElement);
+
+  widget.bind(
+    window.SC.Widget.Events.PLAY,
+    () => (player.audio.playing = false)
+  );
+});
+
+watch(
+  () => player.audio.playing,
+  (playing) => {
+    if (playing) {
+      widget?.pause();
+    }
+  }
 );
 
 if (!lecture.value) {
@@ -43,59 +80,61 @@ if (!lecture.value) {
 
       <Separator />
 
-      <div>
-        <p class="text-muted-foreground">{{ lecture.items.length }} حلقات</p>
+      <client-only>
+        <div>
+          <p class="text-muted-foreground">{{ lecture.items.length }} حلقات</p>
 
-        <Accordion
-          type="single"
-          class="w-full"
-          collapsible
-          v-model="activeItem"
-        >
-          <AccordionItem
-            v-for="item in lecture.items"
-            :key="item.id"
-            :value="`item-${item.id}`"
+          <Accordion
+            type="single"
+            class="w-full"
+            collapsible
+            v-model="activeItem"
           >
-            <AccordionTrigger class="hover:no-underline">
-              <div class="flex gap-2">
-                <img
-                  :src="item.image"
-                  :alt="item.name"
-                  class="object-contain w-12 h-12 rounded-md"
-                />
-                {{ item.name }}
-              </div>
-              <template #icon>
-                <Button size="icon" class="rounded-full">
-                  <Icon
-                    :name="
-                      activeItem === `item-${item.id}`
-                        ? 'lucide:pause'
-                        : 'lucide:play'
-                    "
-                    mode="svg"
-                    class="[&>path]:fill-current [&>g]:fill-current h-5 w-5"
+            <AccordionItem
+              v-for="item in lecture.items"
+              :key="item.id"
+              :value="`item-${item.id}`"
+            >
+              <AccordionTrigger class="hover:no-underline">
+                <div class="flex gap-2">
+                  <img
+                    :src="item.image"
+                    :alt="item.name"
+                    class="object-contain w-12 h-12 rounded-md"
                   />
-                </Button>
-              </template>
-            </AccordionTrigger>
-            <AccordionContent>
-              <iframe
-                width="100%"
-                height="166"
-                scrolling="no"
-                frameborder="no"
-                class="rounded-md"
-                allow="autoplay"
-                :src="`https://w.soundcloud.com/player/?url=${encodeURIComponent(
-                  item.url
-                )}&color=%2322c55e&auto_play=true&single_active=true&sharing=false&buying=false&show_artwork=false&show_user=false`"
-              />
-            </AccordionContent>
-          </AccordionItem>
-        </Accordion>
-      </div>
+                  <span class="text-start">{{ item.name }}</span>
+                </div>
+                <template #icon>
+                  <Button size="icon" class="rounded-full shrink-0">
+                    <Icon
+                      :name="
+                        activeItem === `item-${item.id}`
+                          ? 'lucide:x'
+                          : 'lucide:play'
+                      "
+                      mode="svg"
+                      class="[&>path]:fill-current [&>g]:fill-current h-5 w-5"
+                    />
+                  </Button>
+                </template>
+              </AccordionTrigger>
+              <AccordionContent>
+                <iframe
+                  width="100%"
+                  height="166"
+                  scrolling="no"
+                  frameborder="no"
+                  class="rounded-md"
+                  allow="autoplay"
+                  :src="`https://w.soundcloud.com/player/?url=${encodeURIComponent(
+                    item.url
+                  )}&color=%2322c55e&auto_play=true&single_active=true&sharing=false&buying=false&show_artwork=false&show_user=false`"
+                />
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
+        </div>
+      </client-only>
     </div>
   </main>
 </template>
