@@ -8,3 +8,7 @@ export function cn(...inputs: ClassValue[]) {
 export function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
+
+export function zeroPad(num: number, places: number) {
+  return String(num).padStart(places, "0");
+}

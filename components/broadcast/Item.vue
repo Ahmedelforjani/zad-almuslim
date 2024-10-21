@@ -5,7 +5,9 @@ import type { Broadcast } from "~/types/model";
 const player = usePlayerStore();
 const props = defineProps<{ item: Broadcast }>();
 
-const isCurrentTrack = computed(() => player.track?.id === props.item.id);
+const isCurrentTrack = computed(
+  () => player.track?.id === props.item.id && player.track.type === "broadcast"
+);
 
 defineEmits<{ play: [Broadcast] }>();
 

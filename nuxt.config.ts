@@ -25,11 +25,4 @@ export default defineNuxtConfig({
       apiUrl: process.env.NUXT_API_URL,
     },
   },
-  // nitro: {
-  //   routeRules: {
-  //     "/api/**": {
-  //       proxy: `${process.env.NUXT_API_URL}/**`,
-  //     },
-  //   },
-  // },
 });

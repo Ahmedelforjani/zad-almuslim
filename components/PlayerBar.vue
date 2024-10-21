@@ -19,13 +19,19 @@ onUnmounted(() => {
     <div class="flex items-center gap-2 lg:gap-6 lg:grid lg:grid-cols-3">
       <div class="flex items-center gap-2">
         <img
+          v-if="track.image"
           :src="track.image"
           :alt="track.name"
           class="object-contain w-12 h-12 rounded-md"
         />
-        <span class="text-sm font-semibold">
-          {{ track.name }}
-        </span>
+        <div class="flex flex-col space-y-1">
+          <span class="text-sm font-semibold">
+            {{ track.name }}
+          </span>
+          <span class="text-sm text-muted-foreground">
+            {{ track.subtitle }}
+          </span>
+        </div>
       </div>
       <div class="lg:space-y-4 max-lg:ms-auto">
         <div class="flex items-center justify-center gap-4">

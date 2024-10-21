@@ -25,7 +25,8 @@ export type Category = {
 export type Track = {
   id: number;
   name: string;
-  image: string;
+  subtitle?: string;
+  image?: string;
   type: string;
   url: string;
 };
@@ -55,4 +56,18 @@ export type LectureItems = {
 
 export type LectureWithItems = Lecture & {
   items: LectureItems[];
+};
+
+export type Reciter = {
+  id: number;
+  name: string;
+  riwayats?: Riwayat[];
+};
+
+export type Riwayat = {
+  id: number;
+  name_ar: string;
+  surah_total: string;
+  surah_list: Record<string, string>;
+  server_url: string;
 };

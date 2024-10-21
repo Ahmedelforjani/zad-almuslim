@@ -64,6 +64,7 @@ if (!lecture.value) {
       </div>
       <BackButton to="/lectures" />
     </div>
+    <Separator class="my-4" />
 
     <div class="max-w-2xl mx-auto mt-6 space-y-6">
       <img

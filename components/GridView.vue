@@ -1,10 +1,12 @@
 <script setup lang="ts" generic="T extends Record<string, any>">
+import { cn } from "~/lib/utils";
 import type { PaginationMeta } from "~/types/model";
 
 defineProps<{
   data: T[];
   pagination?: PaginationMeta;
   isLoading?: boolean;
+  gridClass?: string;
 }>();
 
 const route = useRoute();
@@ -19,14 +21,24 @@ const route = useRoute();
       <Icon class="w-10 h-10 animate-spin" name="lucide:loader-2" />
     </div>
     <div
-      class="relative grid lg:grid-cols-[repeat(auto-fill,minmax(200px,1fr))] grid-cols-[repeat(auto-fill,minmax(150px,1fr))] gap-6"
+      :class="
+        cn(
+          'relative grid lg:grid-cols-[repeat(auto-fill,minmax(200px,1fr))] grid-cols-[repeat(auto-fill,minmax(150px,1fr))] gap-4',
+          gridClass
+        )
+      "
     >
       <slot
         v-for="(item, key) in data"
         :key="key"
         name="item"
+        :index="key"
         :value="item"
         :data="data"
+        :order="
+          pagination &&
+          key + 1 + (pagination?.current - 1) * pagination?.per_page
+        "
       />
     </div>
     <div class="flex items-center justify-center mt-6">

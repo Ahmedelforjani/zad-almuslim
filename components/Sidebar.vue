@@ -9,6 +9,11 @@ const items = [
   { name: "الرئيسية", icon: "lucide:home", to: "/" },
   { name: "الإذاعات", icon: "lucide:radio", to: "/broadcasts" },
   { name: "الدروس", icon: "lucide:book", to: "/lectures" },
+  {
+    name: "قراءات القرآن الكريم",
+    icon: "lucide:book-open-text",
+    to: "/reciters",
+  },
 ];
 
 watch(
