@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { Card, CardContent } from "~/components/ui/card";
-import type { Lecture, Pagination, Reciter } from "~/types/model";
+import type { Pagination, Reciter } from "~/types/model";
 
 const route = useRoute();
 const routeQuery = computed(() => route.query);
