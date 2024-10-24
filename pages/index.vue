@@ -35,7 +35,7 @@ const [{ data: broadcasts }, { data: lectures }, { data: reciters }] =
 
     <div class="flex items-center justify-between mt-6">
       <div class="space-y-1">
-        <h2 class="flex items-center text-2xl font-semibold tracking-tight">
+        <h2 class="flex items-center lg:text-2xl font-semibold tracking-tight">
           <Icon name="lucide:radio" class="me-2" />
           الإذاعات
         </h2>

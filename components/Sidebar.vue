@@ -14,6 +14,11 @@ const items = [
     icon: "lucide:book-open-text",
     to: "/reciters",
   },
+  {
+    name: "حصن المسلم",
+    icon: "lucide:book-marked",
+    to: "/hisnmuslim",
+  },
 ];
 
 watch(

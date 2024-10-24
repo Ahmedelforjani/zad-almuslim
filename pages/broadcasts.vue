@@ -18,7 +18,7 @@ const { data: broadcasts, status } = await useAsyncData(
   <div class="">
     <div class="flex items-center justify-between">
       <div class="space-y-1">
-        <h2 class="flex items-center text-2xl font-semibold tracking-tight">
+        <h2 class="flex items-center lg:text-2xl font-semibold tracking-tight">
           <Icon name="lucide:radio" class="me-2" />
           الإذاعات
         </h2>

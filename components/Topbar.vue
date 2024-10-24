@@ -3,7 +3,9 @@ const themeStore = useThemeStore();
 </script>
 
 <template>
-  <div class="flex items-center justify-between h-16 gap-6 px-6 border-b">
+  <div
+    class="flex items-center justify-between h-16 gap-6 px-4 border-b lg:px-6"
+  >
     <NuxtLink to="/">
       <Logo />
     </NuxtLink>

@@ -23,7 +23,7 @@ export type Category = {
 };
 
 export type Track = {
-  id: number;
+  id?: number | string;
   name: string;
   subtitle?: string;
   image?: string;
@@ -70,4 +70,20 @@ export type Riwayat = {
   surah_total: string;
   surah_list: Record<string, string>;
   server_url: string;
+};
+
+export type HisnmuslimItem = {
+  ID: number;
+  TITLE: string;
+  AUDIO_URL: string;
+  TEXT: string;
+};
+
+export type HisnmuslimContentItem = {
+  ID: number;
+  ARABIC_TEXT: string;
+  LANGUAGE_ARABIC_TRANSLATED_TEXT: string;
+  TRANSLATED_TEXT: string;
+  REPEAT: number;
+  AUDIO: string;
 };
