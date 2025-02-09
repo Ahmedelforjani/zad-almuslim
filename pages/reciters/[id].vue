@@ -6,13 +6,15 @@ const id = computed(() => route.params.id);
 
 const { data: reciter } = await useAsyncData(
   "reciters",
-  () => useHttp().$get<Reciter>(`/reciters/${id.value}`),
+  () =>
+    useHttp()
+      .$get<Reciter>(`/reciters/${id.value}`)
+      .catch(() => {
+        navigateTo("/404");
+        return null;
+      }),
   { watch: [id] }
 );
-
-if (!reciter.value) {
-  navigateTo("/404");
-}
 </script>
 
 <template>

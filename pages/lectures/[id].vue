@@ -18,7 +18,13 @@ let widget: any = undefined;
 
 const { data: lecture } = await useAsyncData(
   "lectures",
-  () => useHttp().$get<LectureWithItems>(`/lectures/${id.value}`),
+  () =>
+    useHttp()
+      .$get<LectureWithItems>(`/lectures/${id.value}`)
+      .catch(() => {
+        navigateTo("/404");
+        return null;
+      }),
   { watch: [id] }
 );
 
@@ -47,10 +53,6 @@ watch(
     }
   }
 );
-
-if (!lecture.value) {
-  navigateTo("/404");
-}
 </script>
 
 <template>

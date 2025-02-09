@@ -18,14 +18,17 @@ const { data } = await useAsyncData(
 );
 
 const { data: hisnmuslim } = await useAsyncData("hisnmuslim", () =>
-  useHttp().get<Record<string, HisnmuslimItem[]>>(
-    "https://www.hisnmuslim.com/api/ar/husn_ar.json"
-  )
+  useHttp()
+    .get<Record<string, HisnmuslimItem[]>>(
+      "https://www.hisnmuslim.com/api/ar/husn_ar.json"
+    )
+    .catch(() => {
+      navigateTo("/404");
+      return null;
+    })
 );
 
-if (!data.value) {
-  navigateTo("/404");
-}
+
 
 const currentDiker = computed(() =>
   Object.values(hisnmuslim.value || {})?.[0]?.find(
