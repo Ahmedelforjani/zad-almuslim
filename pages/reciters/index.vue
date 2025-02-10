@@ -6,7 +6,7 @@ const router = useRouter();
 const routeQuery = computed(() => route.query);
 const search = ref(route.query.search?.toString() || "");
 
-const { data: lectures, status } = await useAsyncData(
+const { data: reciters, status } = await useAsyncData(
   "reciters",
   () =>
     useHttp().get<Pagination<Reciter>>("/reciters", {
@@ -21,7 +21,9 @@ const { data: lectures, status } = await useAsyncData(
 watchDebounced(
   search,
   () => {
-    router.replace({ query: { ...routeQuery.value, search: search.value } });
+    router.replace({
+      query: { ...routeQuery.value, page: 1, search: search.value },
+    });
   },
   {
     debounce: 500,
@@ -51,9 +53,9 @@ watchDebounced(
       </span>
     </div>
     <GridView
-      v-if="lectures?.data"
-      :data="lectures.data"
-      :pagination="lectures.meta"
+      v-if="reciters?.data"
+      :data="reciters.data"
+      :pagination="reciters.meta"
       :is-loading="status === 'pending'"
       grid-class="lg:grid-cols-[repeat(auto-fill,minmax(250px,1fr))] grid-cols-[repeat(auto-fill,minmax(200px,1fr))]"
       class="mt-6"

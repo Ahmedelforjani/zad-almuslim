@@ -18,7 +18,9 @@ const { data: lectures, status } = await useAsyncData(
 watchDebounced(
   search,
   () => {
-    router.replace({ query: { ...routeQuery.value, search: search.value } });
+    router.replace({
+      query: { ...routeQuery.value, page: 1, search: search.value },
+    });
   },
   {
     debounce: 500,

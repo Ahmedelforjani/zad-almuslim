@@ -29,7 +29,6 @@ const { data: reciter } = await useAsyncData(
       <BackButton to="/reciters" />
     </div>
     <Separator class="my-4" />
-
     <div class="max-w-2xl mx-auto mt-6 space-y-6">
       <div
         v-for="(riwaya, riwayaIndex) in reciter.riwayats"
