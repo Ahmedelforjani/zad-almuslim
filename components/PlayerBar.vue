@@ -3,6 +3,25 @@ const playerStore = usePlayerStore();
 const { track } = storeToRefs(playerStore);
 const { audio } = playerStore;
 
+const sliderVolume = ref([audio.volume]);
+const currentTimeRef = ref([audio.currentTime]);
+
+watchEffect(() => {
+  currentTimeRef.value = [audio.currentTime];
+});
+
+watch(currentTimeRef, (newTime) => {
+  audio.currentTime = newTime[0];
+});
+
+watchEffect(() => {
+  sliderVolume.value = [audio.volume];
+});
+
+watch(sliderVolume, (newSliderVolume) => {
+  audio.volume = newSliderVolume[0];
+});
+
 onMounted(() => {
   if (!import.meta.client) return;
 
@@ -77,10 +96,24 @@ onUnmounted(() => {
             />
           </Button>
         </div>
-        <!-- <Slider disabled :max="100" :step="1" /> -->
+        <span
+          class="text-sm text-muted-foreground lg:flex gap-4 hidden"
+          v-if="track.type !== 'broadcast' && audio.duration"
+        >
+          {{ Math.floor(audio.duration / 60) }}:{{
+            (audio.duration % 60).toFixed()
+          }}
+          <Slider v-model="currentTimeRef" :max="audio.duration" :step="0.5" />
+          {{ Math.floor(audio.currentTime / 60) }}:{{
+            (audio.currentTime % 60).toFixed()
+          }}
+        </span>
       </div>
       <div class="items-center justify-end hidden gap-2 lg:flex">
-        <!-- <Slider disabled :max="100" :step="1" class="w-28" /> -->
+        <span class="text-sm text-muted-foreground"
+          >{{ (audio.volume * 100).toFixed() }} %
+        </span>
+        <Slider v-model="sliderVolume" :max="1" :step="0.01" class="w-28" />
         <Button
           size="icon"
           variant="ghost"

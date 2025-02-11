@@ -13,7 +13,7 @@ const [{ data: broadcasts }, { data: lectures }, { data: reciters }] =
   <div class="">
     <div class="flex items-center justify-between">
       <div class="space-y-1">
-        <h2 class="text-2xl font-semibold tracking-tight">
+        <h2 class="flex items-center text-2xl font-semibold tracking-tight">
           <Icon name="lucide:book-open-text" class="me-2" />
           قراءات القرآن الكريم
         </h2>
@@ -57,7 +57,7 @@ const [{ data: broadcasts }, { data: lectures }, { data: reciters }] =
 
     <div class="flex items-center justify-between mt-6">
       <div class="space-y-1">
-        <h2 class="text-2xl font-semibold tracking-tight">
+        <h2 class="flex items-center text-2xl font-semibold tracking-tight">
           <Icon name="lucide:book" class="me-2" />
           الدروس
         </h2>

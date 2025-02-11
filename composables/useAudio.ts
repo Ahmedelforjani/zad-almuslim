@@ -8,7 +8,7 @@ export function useAudio(
   target: Ref<HTMLAudioElement | undefined>,
   { src }: Options
 ) {
-  const volume = ref(1);
+  const volume = ref(0.25);
   const playing = ref(false);
   const waiting = ref(false);
   const rate = ref(1);
@@ -175,5 +175,7 @@ export function useAudio(
     playing,
     target,
     volume,
+    currentTime,
+    duration,
   };
 }
