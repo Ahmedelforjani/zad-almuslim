@@ -8,7 +8,9 @@ export const usePlayerStore = defineStore(
 
     const audioElement = ref<HTMLAudioElement | undefined>();
     const src = computed(() => track.value?.url || "");
-    const audio = useAudio(audioElement, { src });
+    const type = computed(() => track.value?.type || "");
+
+    const audio = useAudio(audioElement, { src, type });
 
     const loadAudio = () => {
       audioElement.value = new Audio();

@@ -2,13 +2,14 @@ const IDLE_TIMEOUT = 10_000;
 
 type Options = {
   src: Ref<string | undefined> | ComputedRef<string | undefined>;
+  type: Ref<string | undefined> | ComputedRef<string | undefined>;
 };
 
 export function useAudio(
   target: Ref<HTMLAudioElement | undefined>,
-  { src }: Options
+  { src, type }: Options
 ) {
-  const volume = ref(0.25);
+  const volume = ref(1);
   const playing = ref(false);
   const waiting = ref(false);
   const rate = ref(1);
@@ -93,9 +94,11 @@ export function useAudio(
         el.play();
       } else {
         el.pause();
-        stopAudioLoadingTimeout.value = setTimeout(() => {
-          el.src = "";
-        }, IDLE_TIMEOUT);
+        if (type.value === "broadcast") {
+          stopAudioLoadingTimeout.value = setTimeout(() => {
+            el.src = "";
+          }, IDLE_TIMEOUT);
+        }
       }
     }
   );

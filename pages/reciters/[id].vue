@@ -8,7 +8,7 @@ const { data: reciter } = await useAsyncData(
   "reciters",
   () =>
     useHttp()
-      .$get<Reciter>(`/reciters/${id.value}`)
+      .get<Reciter>(`/reciters/${id.value}`)
       .catch(() => {
         navigateTo("/404");
         return null;

@@ -20,7 +20,7 @@ const { data: lecture } = await useAsyncData(
   "lectures",
   () =>
     useHttp()
-      .$get<LectureWithItems>(`/lectures/${id.value}`)
+      .get<LectureWithItems>(`/lectures/${id.value}`)
       .catch(() => {
         navigateTo("/404");
         return null;
