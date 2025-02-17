@@ -52,6 +52,7 @@ onUnmounted(() => {
           </span>
         </div>
       </div>
+      <div class="flex items-center gap-2"></div>
       <div class="lg:space-y-4 max-lg:ms-auto">
         <div class="flex items-center justify-center gap-4">
           <Button
@@ -96,23 +97,40 @@ onUnmounted(() => {
             />
           </Button>
         </div>
-        <span
+        <div
           class="text-sm text-muted-foreground lg:flex gap-4 hidden"
           v-if="track.type !== 'broadcast' && audio.duration"
         >
-          {{ Math.floor(audio.duration / 60) }}:{{
-            (audio.duration % 60).toFixed()
-          }}
+          <div class="flex items-center">
+            {{ (audio.duration % 60).toFixed().padStart(2, "0") }}:
+            <span>
+              {{
+                Math.floor((audio.duration % 3600) / 60)
+                  .toString()
+                  .padStart(2, "0")
+              }}
+            </span>
+            <span v-if="audio.duration >= 3600">
+              :{{ Math.floor(audio.duration / 3600) }}
+            </span>
+          </div>
           <Slider v-model="currentTimeRef" :max="audio.duration" :step="0.5" />
-          {{ Math.floor(audio.currentTime / 60) }}:{{
-            (audio.currentTime % 60).toFixed()
-          }}
-        </span>
+          <div class="flex items-center">
+            {{ (audio.currentTime % 60).toFixed().padStart(2, "0") }}:
+            <span>
+              {{
+                Math.floor((audio.currentTime % 3600) / 60)
+                  .toString()
+                  .padStart(2, "0")
+              }}
+            </span>
+            <span v-if="audio.currentTime >= 3600">
+              :{{ Math.floor(audio.currentTime / 3600) }}
+            </span>
+          </div>
+        </div>
       </div>
       <div class="items-center justify-end hidden gap-2 lg:flex">
-        <span class="text-sm text-muted-foreground"
-          >{{ (audio.volume * 100).toFixed() }} %
-        </span>
         <Slider v-model="sliderVolume" :max="1" :step="0.01" class="w-28" />
         <Button
           size="icon"
@@ -121,7 +139,11 @@ onUnmounted(() => {
           @click="audio.muted = !audio.muted"
         >
           <Icon
-            :name="audio.muted ? 'lucide:volume-x' : 'lucide:volume-2'"
+            :name="
+              audio.muted || sliderVolume[0] === 0
+                ? 'lucide:volume-off'
+                : 'lucide:volume-2'
+            "
             mode="svg"
             class="[&>path]:fill-[currentColor] h-5 w-5"
           />
