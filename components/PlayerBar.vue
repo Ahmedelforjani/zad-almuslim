@@ -37,22 +37,23 @@ onUnmounted(() => {
   <div v-if="track" class="w-full px-6 py-2 border-t lg:py-4 bg-background">
     <div class="flex items-center gap-2 lg:gap-6 lg:grid lg:grid-cols-3">
       <div class="flex items-center gap-2">
-        <img
-          v-if="track.image"
-          :src="track.image"
-          :alt="track.name"
-          class="object-contain w-12 h-12 rounded-md"
-        />
-        <div class="flex flex-col space-y-1">
-          <span class="text-sm font-semibold">
-            {{ track.name }}
-          </span>
-          <span class="text-sm text-muted-foreground">
-            {{ track.subtitle }}
-          </span>
+        <div class="flex items-center gap-2">
+          <img
+            v-if="track.image"
+            :src="track.image"
+            :alt="track.name"
+            class="object-contain w-12 h-12 rounded-md"
+          />
+          <div class="flex flex-col space-y-1">
+            <span class="text-sm font-semibold">
+              {{ track.name }}
+            </span>
+            <span class="text-sm text-muted-foreground">
+              {{ track.subtitle }}
+            </span>
+          </div>
         </div>
       </div>
-      <div class="flex items-center gap-2"></div>
       <div class="lg:space-y-4 max-lg:ms-auto">
         <div class="flex items-center justify-center gap-4">
           <Button
