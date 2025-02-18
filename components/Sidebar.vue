@@ -7,13 +7,13 @@ const route = useRoute();
 
 const items = [
   { name: "الرئيسية", icon: "lucide:home", to: "/" },
-  { name: "الإذاعات", icon: "lucide:radio", to: "/broadcasts" },
-  { name: "الدروس", icon: "lucide:book", to: "/lectures" },
   {
-    name: "قراءات القرآن الكريم",
+    name: "قراء القرآن الكريم",
     icon: "lucide:book-open-text",
     to: "/reciters",
   },
+  { name: "الإذاعات", icon: "lucide:radio", to: "/broadcasts" },
+  { name: "الدروس", icon: "lucide:book", to: "/lectures" },
   {
     name: "حصن المسلم",
     icon: "lucide:book-marked",

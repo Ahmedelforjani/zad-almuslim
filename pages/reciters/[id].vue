@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { Reciter } from "~/types/model";
+const playerStore = usePlayerStore();
 
 const route = useRoute();
 const id = computed(() => route.params.id);
@@ -15,6 +16,18 @@ const { data: reciter } = await useAsyncData(
       }),
   { watch: [id] }
 );
+
+const selectedRiwaya = ref<number>(reciter.value?.riwayats?.[0].id || 0);
+
+const handleSelectedRiwaya = (id: number) => {
+  selectedRiwaya.value = id;
+};
+
+const play = (riwayaID: number) => {
+  const riwaya = reciter.value?.riwayats?.find((r) => r.id === riwayaID);
+  if (!riwaya || !reciter.value) return;
+  // playerStore.playList = riwaya
+};
 </script>
 
 <template>
@@ -30,16 +43,21 @@ const { data: reciter } = await useAsyncData(
     </div>
     <Separator class="my-4" />
     <div class="max-w-2xl mx-auto mt-6 space-y-6">
+      <RiwayatComboBox
+        :riwayats="reciter.riwayats || []"
+        @update:selected="handleSelectedRiwaya"
+      />
       <div
         v-for="(riwaya, riwayaIndex) in reciter.riwayats"
         :key="`riwaya-${riwayaIndex}`"
       >
-        <div class="p-4 rounded-xl bg-primary text-primary-foreground">
-          <h4 class="text-xl font-semibold tracking-tight">
-            رواية {{ riwaya.name_ar }}
-          </h4>
-        </div>
-        <!-- <div class="relative items-center w-full mt-6">
+        <div v-if="selectedRiwaya === riwaya.id">
+          <div class="p-4 rounded-xl bg-primary text-primary-foreground">
+            <h4 class="text-xl font-semibold tracking-tight">
+              رواية {{ riwaya.name_ar }}
+            </h4>
+          </div>
+          <!-- <div class="relative items-center w-full mt-6">
           <Input
             type="text"
             placeholder="بحث..."
@@ -51,15 +69,16 @@ const { data: reciter } = await useAsyncData(
             <Icon name="lucide:search" class="w-6 h-6 text-muted-foreground" />
           </span>
         </div> -->
-        <div class="grid grid-cols-2 gap-4 mt-6">
-          <SurahItem
-            v-for="(surah, order) in riwaya.surah_list"
-            :key="`surah-${riwayaIndex}-${order}`"
-            :item="surah"
-            :order="+order"
-            :reciter="reciter"
-            :link="riwaya.server_url"
-          />
+          <div class="grid grid-cols-2 gap-4 mt-6">
+            <SurahItem
+              v-for="(surah, order) in riwaya.surah_list"
+              :key="`surah-${riwayaIndex}-${order}`"
+              :item="surah"
+              :order="+order"
+              :reciter="reciter"
+              :link="riwaya.server_url"
+            />
+          </div>
         </div>
       </div>
     </div>
