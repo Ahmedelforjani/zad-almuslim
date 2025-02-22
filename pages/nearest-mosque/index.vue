@@ -62,7 +62,7 @@ watchEffect(async () => {
       { watch: [routeQuery] }
     );
 
-    mosques.value = data.value?.slice(0, 16) || [];
+    mosques.value = data.value?.slice(0, 15) || [];
   } catch (error) {
     console.log(error);
   } finally {
@@ -97,10 +97,7 @@ onMounted(() => {
       </button>
     </div>
 
-    <div
-      v-else-if="mosques.length > 0"
-      class="flex lg:flex-row flex-col flex-wrap justify-center gap-6"
-    >
+    <div v-else-if="mosques.length > 0" class="grid grid-cols-5 gap-6">
       <div v-for="(mosque, index) in mosques" :key="index">
         <MosqueItem
           v-if="mosque"
