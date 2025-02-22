@@ -87,3 +87,10 @@ export type HisnmuslimContentItem = {
   REPEAT: number;
   AUDIO: string;
 };
+
+export type Mosque = {
+  name: string;
+  latitude: number;
+  longitude: number;
+  distance_km: number;
+};

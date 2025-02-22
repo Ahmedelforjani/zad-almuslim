@@ -5,7 +5,6 @@ export const usePlayerStore = defineStore(
   "player",
   () => {
     const track = ref<Track | undefined>(undefined);
-
     const audioElement = ref<HTMLAudioElement | undefined>();
     const src = computed(() => track.value?.url || "");
     const type = computed(() => track.value?.type || "");

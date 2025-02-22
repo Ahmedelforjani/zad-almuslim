@@ -19,6 +19,11 @@ const items = [
     icon: "lucide:book-marked",
     to: "/hisnmuslim",
   },
+  {
+    name: "أقرب مسجد",
+    icon: "lucide:building",
+    to: "/nearest-mosque",
+  },
 ];
 
 watch(

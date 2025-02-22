@@ -33,12 +33,12 @@ watchDebounced(
 </script>
 
 <template>
-  <div class="">
+  <div>
     <div class="flex items-center justify-between">
       <div class="space-y-1">
         <h2 class="flex items-center font-semibold tracking-tight lg:text-2xl">
           <Icon name="lucide:book-open-text" class="me-2" />
-          قراءات القرآن الكريم
+          قراء القرآن الكريم
         </h2>
       </div>
       <BackButton to="/" />

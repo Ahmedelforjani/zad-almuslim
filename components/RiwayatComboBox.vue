@@ -72,18 +72,22 @@ onMounted(() => {
               :value="riwaya.id"
               @select="() => selectRiwaya(riwaya)"
             >
-              {{ riwaya.name_ar }}
-              <Icon
-                name="lucide:check"
-                :class="
-                  cn(
-                    'ml-auto h-4 w-4',
-                    selectedRiwaya?.id === riwaya.id
-                      ? 'opacity-100'
-                      : 'opacity-0'
-                  )
-                "
-              />
+              <div class="flex items-center justify-between w-full">
+                <span>
+                  {{ riwaya.name_ar }}
+                </span>
+                <Icon
+                  name="lucide:check"
+                  :class="
+                    cn(
+                      'h-4 w-4',
+                      selectedRiwaya?.id === riwaya.id
+                        ? 'opacity-100'
+                        : 'opacity-0'
+                    )
+                  "
+                />
+              </div>
             </CommandItem>
           </CommandGroup>
         </CommandList>

@@ -15,7 +15,7 @@ const [{ data: broadcasts }, { data: lectures }, { data: reciters }] =
       <div class="space-y-1">
         <h2 class="flex items-center text-2xl font-semibold tracking-tight">
           <Icon name="lucide:book-open-text" class="me-2" />
-          قراءات القرآن الكريم
+          قراء القرآن الكريم
         </h2>
       </div>
       <NuxtLink
