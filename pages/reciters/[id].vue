@@ -44,6 +44,7 @@ const play = (riwayaID: number) => {
     <Separator class="my-4" />
     <div class="max-w-2xl mx-auto mt-6 space-y-6">
       <RiwayatComboBox
+        v-if="reciter.riwayats && reciter.riwayats.length > 1"
         :riwayats="reciter.riwayats || []"
         @update:selected="handleSelectedRiwaya"
       />

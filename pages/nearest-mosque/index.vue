@@ -99,7 +99,7 @@ onMounted(() => {
 
     <div
       v-else-if="mosques.length > 0"
-      class="relative grid lg:grid-cols-[repeat(auto-fill,minmax(350px,1fr))] grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-4"
+      class="relative grid lg:grid-cols-[repeat(auto-fill,minmax(250px,1fr))] grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-4"
     >
       <div v-for="(mosque, index) in mosques" :key="index">
         <MosqueItem
