@@ -5,7 +5,7 @@ const props = defineProps<{ item: HisnmuslimContentItem; title: string }>();
 
 const track = computed(() => ({
   id: props.item.AUDIO,
-  name: props.title,
+  title: props.title,
   subtitle: props.item.ID.toString(),
   url: props.item.AUDIO,
   type: "hisnmuslim",

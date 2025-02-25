@@ -5,15 +5,15 @@ const props = defineProps<{
   order?: number;
   title: string;
   link: string;
-  trackName: string;
+  subtitle?: string;
   trackId: number;
   type: string;
 }>();
 
 const track = computed(() => ({
   id: props.trackId,
-  subtitle: props.title,
-  name: props.trackName,
+  title: props.title,
+  subtitle: props.subtitle,
   url: props.link,
   type: props.type,
 }));
@@ -36,18 +36,16 @@ const play = () => {
 
 <template>
   <div
-    class="flex items-center justify-between transition-all duration-300 group-hover:text-primary px-3 hover:bg-muted/50 hover:cursor-pointer py-3"
-    @click="play"
-  >
+    class="-mx-4 px-6 flex items-center justify-between transition-all duration-300 group-hover:text-primary hover:bg-muted/50 hover:cursor-pointer py-3"
+    @click="play">
     <div class="flex gap-2">
       <span v-if="order">{{ order }}.</span>
       <di v>
         <span class="font-semibold">
-          <span v-if="track.type === 'surah'"> سورة </span>
-          {{ track.subtitle }}
+          {{ track.title }}
         </span>
         <p class="text-sm text-muted-foreground">
-          {{ track.name }}
+          {{ track.subtitle }}
         </p>
       </di>
     </div>

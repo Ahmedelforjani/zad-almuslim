@@ -24,7 +24,7 @@ export type Category = {
 
 export type Track = {
   id?: number | string;
-  name: string;
+  title: string;
   subtitle?: string;
   image?: string;
   type: string;
@@ -33,6 +33,7 @@ export type Track = {
 
 export type PlayList = {
   title: string;
+  subtitle?: string;
   server_url: string;
   order: number;
 };

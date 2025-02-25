@@ -47,18 +47,9 @@ onMounted(() => {
 <template>
   <Popover v-model:open="open">
     <PopoverTrigger as-child>
-      <Button
-        variant="outline"
-        role="combobox"
-        :aria-expanded="open"
-        class="w-full justify-between"
-      >
+      <Button variant="outline" role="combobox" :aria-expanded="open" class="w-full justify-between">
         {{ selectedRiwaya?.name_ar || "اختر الرواية" }}
-        <Icon
-          name="lucide:chevron-down"
-          class="h-4 w-4"
-          :class="open ? 'rotate-180' : 'rotate-0'"
-        />
+        <Icon name="lucide:chevron-down" class="h-4 w-4" :class="open ? 'rotate-180' : 'rotate-0'" />
       </Button>
     </PopoverTrigger>
     <PopoverContent class="p-0 lg:w-[675px] w-[92vw]">
@@ -66,27 +57,19 @@ onMounted(() => {
         <CommandEmpty>لم يتم العثور على الرواية</CommandEmpty>
         <CommandList>
           <CommandGroup>
-            <CommandItem
-              v-for="riwaya in riwayats"
-              :key="riwaya.id"
-              :value="riwaya.id"
-              @select="() => selectRiwaya(riwaya)"
-            >
+            <CommandItem v-for="riwaya in riwayats" :key="riwaya.id" :value="riwaya.id"
+              @select="() => selectRiwaya(riwaya)">
               <div class="flex items-center justify-between w-full">
                 <span>
                   {{ riwaya.name_ar }}
                 </span>
-                <Icon
-                  name="lucide:check"
-                  :class="
-                    cn(
-                      'h-4 w-4',
-                      selectedRiwaya?.id === riwaya.id
-                        ? 'opacity-100'
-                        : 'opacity-0'
-                    )
-                  "
-                />
+                <Icon name="lucide:check" :class="cn(
+                  'h-4 w-4',
+                  selectedRiwaya?.id === riwaya.id
+                    ? 'opacity-100'
+                    : 'opacity-0'
+                )
+                  " />
               </div>
             </CommandItem>
           </CommandGroup>

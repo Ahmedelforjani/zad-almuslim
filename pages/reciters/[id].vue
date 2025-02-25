@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Reciter, PlayList } from "~/types/model";
+import type { Reciter, PlayList, Riwayat } from "~/types/model";
 const playerStore = usePlayerStore();
 
 const route = useRoute();
@@ -17,27 +17,38 @@ const { data: reciter } = await useAsyncData(
   { watch: [id] }
 );
 
+const search = ref("");
 const selectedRiwaya = ref<number>(reciter.value?.riwayats?.[0].id || 0);
+
+const riwaya = computed(() => {
+  const temp = reciter.value?.riwayats?.find((r) => r.id === selectedRiwaya.value) || reciter.value?.riwayats?.[0]
+  const surahList = Object.entries(temp?.surah_list || {}).reduce((acc, [key, value]) => {
+    if (value.toLowerCase().includes(search.value.toLowerCase())) {
+      acc[key] = value;
+    }
+    return acc;
+  }, {} as Record<string, string>);
+  return { ...temp, surah_list: surahList } as Riwayat;
+});
 
 const handleSelectedRiwaya = (id: number) => {
   selectedRiwaya.value = id;
 };
 
-const play = (riwayaID: number) => {
-  const riwaya = reciter.value?.riwayats?.find((r) => r.id === riwayaID);
-  if (!riwaya || !reciter.value) return;
-  const surahArray: PlayList[] = Object.entries(riwaya.surah_list).map(
+const play = () => {
+  if (!riwaya.value || !reciter.value) return;
+  const surahArray: PlayList[] = Object.entries(riwaya.value.surah_list).map(
     ([key, value]) => {
       const surahNumber = key.padStart(3, "0");
       return {
-        title: value,
-        server_url: `${riwaya.server_url}${surahNumber}.mp3`,
+        title: `سورة ${value}`,
+        subtitle: reciter.value?.name,
+        server_url: `${riwaya.value?.server_url}${surahNumber}.mp3`,
         order: +key,
       };
     }
   );
   playerStore.playList = surahArray;
-  console.log(playerStore.playList);
 };
 </script>
 
@@ -53,47 +64,17 @@ const play = (riwayaID: number) => {
       <BackButton to="/reciters" />
     </div>
     <Separator class="my-4" />
-    <div class="max-w-2xl mx-auto mt-6 space-y-6">
-      <RiwayatComboBox
-        v-if="reciter.riwayats && reciter.riwayats.length > 1"
-        :riwayats="reciter.riwayats || []"
-        @update:selected="handleSelectedRiwaya"
-      />
-      <div
-        v-for="(riwaya, riwayaIndex) in reciter.riwayats"
-        :key="`riwaya-${riwayaIndex}`"
-      >
-        <div v-if="selectedRiwaya === riwaya.id">
-          <div class="p-4 rounded-xl bg-primary text-primary-foreground">
-            <h4 class="text-xl font-semibold tracking-tight">
-              رواية {{ riwaya.name_ar }}
-            </h4>
-          </div>
-          <!-- <div class="relative items-center w-full mt-6">
-          <Input
-            type="text"
-            placeholder="بحث..."
-            class="pe-10"
-          />
-          <span
-            class="absolute inset-y-0 flex items-center justify-center px-2 end-0"
-          >
-            <Icon name="lucide:search" class="w-6 h-6 text-muted-foreground" />
-          </span>
-        </div> -->
-          <div class="grid grid-cols-2 gap-4 mt-6">
-            <SurahItem
-              v-for="(surah, order) in riwaya.surah_list"
-              :key="`surah-${riwayaIndex}-${order}`"
-              :item="surah"
-              :order="+order"
-              :reciter="reciter"
-              :link="riwaya.server_url"
-              :riwayaID="riwaya.id"
-              @play="play"
-            />
-          </div>
-        </div>
+    <div class="max-w-2xl mx-auto mt-6">
+      <RiwayatComboBox :riwayats="reciter.riwayats || []" @update:selected="handleSelectedRiwaya" />
+      <div class="relative items-center w-full mt-4">
+        <Input type="text" placeholder="بحث..." class="pe-10" v-model="search" />
+        <span class="absolute inset-y-0 flex items-center justify-center px-2 end-0">
+          <Icon name="lucide:search" class="w-6 h-6 text-muted-foreground" />
+        </span>
+      </div>
+      <div v-if="riwaya" class="grid grid-cols-2 gap-4 mt-6">
+        <SurahItem v-for="(surah, order) in riwaya.surah_list" :key="`surah-${selectedRiwaya}-${order}`" :item="surah"
+          :order="+order" :reciter="reciter" :link="riwaya.server_url" :riwayaID="riwaya.id" @play="play" />
       </div>
     </div>
 
