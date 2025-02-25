@@ -28,8 +28,6 @@ const { data: hisnmuslim } = await useAsyncData("hisnmuslim", () =>
     })
 );
 
-
-
 const currentDiker = computed(() =>
   Object.values(hisnmuslim.value || {})?.[0]?.find(
     (item) => +item.ID === +id.value

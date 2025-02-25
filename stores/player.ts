@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import type { Track } from "~/types/model";
+import type { Track, PlayList } from "~/types/model";
 
 export const usePlayerStore = defineStore(
   "player",
@@ -8,6 +8,7 @@ export const usePlayerStore = defineStore(
     const audioElement = ref<HTMLAudioElement | undefined>();
     const src = computed(() => track.value?.url || "");
     const type = computed(() => track.value?.type || "");
+    const playList = ref<PlayList[] | undefined>(undefined);
 
     const audio = useAudio(audioElement, { src, type });
 
@@ -18,11 +19,17 @@ export const usePlayerStore = defineStore(
 
     const unloadAudio = () => (audioElement.value = undefined);
 
-    return { track, audio, loadAudio, unloadAudio };
+    return { track, audio, playList, loadAudio, unloadAudio };
   },
   {
     persist: {
-      pick: ["track"],
-    },
+      key: "player",
+      storage: import.meta.client ? localStorage : undefined,
+      paths: ["track", "playList"],
+      serializer: {
+        serialize: JSON.stringify,
+        deserialize: JSON.parse,
+      },
+    } as any,
   }
 );

@@ -10,7 +10,8 @@ const player = usePlayerStore();
 const isCurrentTrack = computed(
   () =>
     player.track?.id === props.tracks[0]?.id &&
-    player.track?.type === props.tracks[0]?.type
+    player.track?.type === props.tracks[0]?.type &&
+    player.track?.url === props.tracks[0]?.url
 );
 
 const play = () => {

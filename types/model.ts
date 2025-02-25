@@ -31,6 +31,12 @@ export type Track = {
   url: string;
 };
 
+export type PlayList = {
+  title: string;
+  server_url: string;
+  order: number;
+};
+
 export type Broadcast = {
   id: number;
   name: string;

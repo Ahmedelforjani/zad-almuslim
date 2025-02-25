@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Reciter } from "~/types/model";
+import type { Reciter, PlayList } from "~/types/model";
 const playerStore = usePlayerStore();
 
 const route = useRoute();
@@ -26,7 +26,18 @@ const handleSelectedRiwaya = (id: number) => {
 const play = (riwayaID: number) => {
   const riwaya = reciter.value?.riwayats?.find((r) => r.id === riwayaID);
   if (!riwaya || !reciter.value) return;
-  // playerStore.playList = riwaya
+  const surahArray: PlayList[] = Object.entries(riwaya.surah_list).map(
+    ([key, value]) => {
+      const surahNumber = key.padStart(3, "0");
+      return {
+        title: value,
+        server_url: `${riwaya.server_url}${surahNumber}.mp3`,
+        order: +key,
+      };
+    }
+  );
+  playerStore.playList = surahArray;
+  console.log(playerStore.playList);
 };
 </script>
 
@@ -78,6 +89,8 @@ const play = (riwayaID: number) => {
               :order="+order"
               :reciter="reciter"
               :link="riwaya.server_url"
+              :riwayaID="riwaya.id"
+              @play="play"
             />
           </div>
         </div>
