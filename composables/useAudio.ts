@@ -9,6 +9,7 @@ export function useAudio(
   target: Ref<HTMLAudioElement | undefined>,
   { src, type }: Options
 ) {
+  const playerStore = usePlayerStore();
   const volume = ref(1);
   const playing = ref(false);
   const waiting = ref(false);
@@ -20,6 +21,7 @@ export function useAudio(
   const currentTime = ref(0);
   const duration = ref(0);
   const buffered = ref<[number, number][]>([]);
+  const currentTrackIndex = ref<number>(0);
 
   const stopAudioLoadingTimeout = ref<NodeJS.Timeout | undefined>();
 
@@ -31,6 +33,53 @@ export function useAudio(
 
     return ranges;
   }
+
+  function playTrack(index: number) {
+    const el = toValue(target);
+    if (!el || !playerStore.playList) return;
+
+    if (index < 0 || index >= playerStore.playList.length) return;
+
+    currentTrackIndex.value = index;
+    const nextTrack = playerStore.playList[currentTrackIndex.value];
+
+    playerStore.track = {
+      id: nextTrack.order,
+      title: nextTrack.title,
+      subtitle: nextTrack.subtitle,
+      type: nextTrack.type,
+      url: nextTrack.server_url,
+      index: currentTrackIndex.value,
+    }; // Set the new track URL
+    playing.value = true;
+    el.autoplay = true;
+  }
+
+  function nextTrack() {
+    if (!playerStore.playList) return;
+
+    if (currentTrackIndex.value < playerStore.playList.length - 1) {
+      playTrack(currentTrackIndex.value + 1);
+    } else {
+      playTrack(0); // Loop to first track if at the last track
+    }
+  }
+
+  function prevTrack() {
+    if (!playerStore.playList) return;
+
+    if (currentTrackIndex.value > 0) {
+      playTrack(currentTrackIndex.value - 1);
+    } else {
+      playTrack(playerStore.playList.length - 1); // Loop to last track if at the first track
+    }
+  }
+
+  watchEffect(() => {
+    if (playerStore.track && typeof playerStore.track.index === "number") {
+      currentTrackIndex.value = playerStore.track.index;
+    }
+  });
 
   watchEffect(() => {
     if (!document) return;
@@ -156,7 +205,9 @@ export function useAudio(
     () => (rate.value = toValue(target)!.playbackRate)
   );
   useEventListener(target, "stalled", () => (stalled.value = true));
-  useEventListener(target, "ended", () => (ended.value = true));
+  useEventListener(target, "ended", () => {
+    nextTrack();
+  });
   useEventListener(target, "pause", () =>
     ignorePlayingUpdates(() => (playing.value = false))
   );
@@ -180,5 +231,7 @@ export function useAudio(
     volume,
     currentTime,
     duration,
+    nextTrack,
+    prevTrack,
   };
 }

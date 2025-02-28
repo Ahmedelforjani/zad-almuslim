@@ -3,6 +3,7 @@ const player = usePlayerStore();
 
 const props = defineProps<{
   order?: number;
+  trackIndex: number;
   title: string;
   link: string;
   subtitle?: string;
@@ -16,6 +17,7 @@ const track = computed(() => ({
   subtitle: props.subtitle,
   url: props.link,
   type: props.type,
+  index: props.trackIndex,
 }));
 
 const isCurrentTrack = computed(
@@ -37,7 +39,8 @@ const play = () => {
 <template>
   <div
     class="-mx-4 px-6 flex items-center justify-between transition-all duration-300 group-hover:text-primary hover:bg-muted/50 hover:cursor-pointer py-3"
-    @click="play">
+    @click="play"
+  >
     <div class="flex gap-2">
       <span v-if="order">{{ order }}.</span>
       <di v>

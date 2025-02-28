@@ -29,6 +29,7 @@ export type Track = {
   image?: string;
   type: string;
   url: string;
+  index?: number;
 };
 
 export type PlayList = {
@@ -36,6 +37,7 @@ export type PlayList = {
   subtitle?: string;
   server_url: string;
   order: number;
+  type: string;
 };
 
 export type Broadcast = {

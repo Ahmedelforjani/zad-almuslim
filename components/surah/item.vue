@@ -7,6 +7,7 @@ const props = defineProps<{
   item: string;
   order: number;
   link: string;
+  trackIndex?: number;
   riwayaID?: number;
 }>();
 
@@ -22,17 +23,21 @@ const play = () => {
 
 const track = computed(() => ({
   id: props.order,
-  title: props.item,
+  title: `سورة ${props.item}`,
   subtitle: props.reciter.name,
   url: `${props.link}${zeroPad(props.order, 3)}.mp3`,
   type: "surah",
+  index: props.trackIndex,
 }));
-
 </script>
 <template>
-  <Card class="transition-all duration-300 shadow group-hover:scale-105 group-hover:shadow-lg">
+  <Card
+    class="transition-all duration-300 shadow group-hover:scale-105 group-hover:shadow-lg"
+  >
     <CardContent class="p-3">
-      <div class="flex items-center justify-between transition-all duration-300 group-hover:text-primary">
+      <div
+        class="flex items-center justify-between transition-all duration-300 group-hover:text-primary"
+      >
         <span>{{ zeroPad(order, 3) }}. {{ item }}</span>
         <PlayButton :tracks="[track]" @click="play" />
       </div>

@@ -13,7 +13,10 @@ const { track, playList } = storeToRefs(usePlayerStore());
 
 <template>
   <Drawer v-if="track">
-    <DrawerTrigger as-child class="cursor-pointer px-4 py-2 hover:bg-muted rounded-sm w-full">
+    <DrawerTrigger
+      as-child
+      class="cursor-pointer px-4 py-2 hover:bg-muted rounded-sm w-full"
+    >
       <div class="flex flex-col">
         <p class="text-sm font-semibold">
           {{ track.title }}
@@ -37,9 +40,20 @@ const { track, playList } = storeToRefs(usePlayerStore());
           <div class="max-w-2xl mx-auto mt-6 space-y-6">
             <AudioController />
             <!-- <VolumeController /> -->
-            <div class="flex flex-col justify-center mt-6 divide-y-2 divide-muted/50">
-              <PlaylistItem v-for="(item, index) in playList" :key="index" :order="index + 1" :track-id="item.order"
-                :link="item.server_url" :subtitle="item.subtitle" :type="track.type" :title="item.title" />
+            <div
+              class="flex flex-col justify-center mt-6 divide-y-2 divide-muted/50"
+            >
+              <PlaylistItem
+                v-for="(item, index) in playList"
+                :key="index"
+                :order="index + 1"
+                :track-id="item.order"
+                :link="item.server_url"
+                :subtitle="item.subtitle"
+                :type="track.type"
+                :title="item.title"
+                :track-index="index"
+              />
             </div>
           </div>
         </div>
