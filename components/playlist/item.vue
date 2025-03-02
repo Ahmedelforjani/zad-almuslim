@@ -35,25 +35,22 @@ const play = () => {
     player.track = track.value;
   }
 };
-
-console.log(player.playList);
 </script>
 
 <template>
   <div
     class="-mx-4 px-6 flex items-center justify-between transition-all duration-300 group-hover:text-primary hover:bg-muted/50 hover:cursor-pointer py-3"
-    @click="play"
-  >
+    @click="play">
     <div class="flex gap-2">
       <span v-if="order">{{ order }}.</span>
-      <di v-if="track.type === 'surah'">
+      <div v-if="track.type === 'surah'">
         <span class="font-semibold">
           {{ track.title }}
         </span>
         <p class="text-sm text-muted-foreground">
           {{ track.subtitle }}
         </p>
-      </di>
+      </div>
       <div v-else>
         <p class="pl-4">
           {{ props.content }}
