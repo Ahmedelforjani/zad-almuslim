@@ -1,49 +1,39 @@
 <script setup lang="ts">
-import type {
-  HisnmuslimContentItem,
-  HisnmuslimItem,
-  Track,
-} from "~/types/model";
+import type { HisnmuslimItem, Track } from "~/types/model";
+
+const player = usePlayerStore();
 
 const route = useRoute();
 const id = computed(() => route.params.id);
 
 const { data } = await useAsyncData(
-  `hisnmuslim/${id.value}`,
-  () =>
-    useHttp().get<Record<string, HisnmuslimContentItem[]>>(
-      `https://www.hisnmuslim.com/api/ar/${id.value}.json`
-    ),
+  `hisnmuslim`,
+  () => useHttp().get<HisnmuslimItem>(`/supplications/${id.value}`),
   { watch: [id] }
 );
 
-const { data: hisnmuslim } = await useAsyncData("hisnmuslim", () =>
-  useHttp()
-    .get<Record<string, HisnmuslimItem[]>>(
-      "https://www.hisnmuslim.com/api/ar/husn_ar.json"
-    )
-    .catch(() => {
-      navigateTo("/404");
-      return null;
-    })
-);
-
-const currentDiker = computed(() =>
-  Object.values(hisnmuslim.value || {})?.[0]?.find(
-    (item) => +item.ID === +id.value
-  )
-);
-const items = computed(() => Object.values(data.value || {})?.[0]);
-const title = computed(() => Object.keys(data.value || {})?.[0]);
+const items = computed(() => data.value?.supplications || []);
+const title = computed(() => data.value?.name || "");
 const track = computed(
   () =>
     ({
-      id: currentDiker.value?.AUDIO_URL,
-      name: currentDiker.value?.TITLE,
-      url: currentDiker.value?.AUDIO_URL,
+      id: data.value?.id,
+      url: data.value?.url,
+      title: data.value?.name,
       type: "hisnmuslim",
     } as Track)
 );
+const play = () => {
+  if (!items.value.length || !data.value) return;
+  player.playList = items.value.map((item, index) => ({
+    id: item.id,
+    title: data.value!.name,
+    content: item.content,
+    server_url: item.url,
+    order: index,
+    type: "hisnmuslim",
+  }));
+};
 </script>
 
 <template>
@@ -52,11 +42,11 @@ const track = computed(
       <div class="space-y-1">
         <h2 class="flex items-center font-semibold tracking-tight lg:text-2xl">
           <Icon name="lucide:book-marked" class="me-2" />
-          {{ currentDiker?.TITLE }}
+          {{ data?.name }}
         </h2>
       </div>
       <div class="flex items-center">
-        <PlayButton v-if="currentDiker" :tracks="[track]" />
+        <!-- <PlayButton v-if="data?.url" :tracks="[track]" /> -->
         <BackButton to="/hisnmuslim" />
       </div>
     </div>
@@ -65,10 +55,12 @@ const track = computed(
     <div class="max-w-2xl mx-auto mt-6">
       <div class="py-3 prose divide-y lg:prose-xl text-foreground">
         <HisnmuslimContentItem
-          v-for="item in items"
-          :key="item.ID"
+          v-for="(item, index) in items"
+          :key="item.id"
           :item="item"
           :title="title"
+          :trackIndex="index"
+          @play="play"
         />
       </div>
     </div>

@@ -1,25 +1,29 @@
 <script setup lang="ts">
-import type { HisnmuslimContentItem } from "~/types/model";
+import type { Supplication } from "~/types/model";
 
-const props = defineProps<{ item: HisnmuslimContentItem; title: string }>();
+const props = defineProps<{
+  item: Supplication;
+  title: string;
+  trackIndex: number;
+}>();
 
 const track = computed(() => ({
-  id: props.item.AUDIO,
+  id: props.item.id,
   title: props.title,
-  subtitle: props.item.ID.toString(),
-  url: props.item.AUDIO,
+  url: props.item.url,
   type: "hisnmuslim",
+  index: props.trackIndex,
 }));
 </script>
 
 <template>
   <div class="py-4">
     <div>
-      {{ item.ARABIC_TEXT }}
+      {{ item.content }}
     </div>
     <div class="flex flex-wrap items-center justify-between mt-4">
-      <span class="text-sm text-primary">تكرار: {{ item.REPEAT }}</span>
-      <PlayButton :tracks="[track]" />
+      <span class="text-sm text-primary">تكرار: {{ item.repeat }}</span>
+      <PlayButton :tracks="[track]" @click="$emit('play')" />
     </div>
   </div>
 </template>

@@ -5,6 +5,7 @@ const props = defineProps<{
   order?: number;
   trackIndex: number;
   title: string;
+  content?: string;
   link: string;
   subtitle?: string;
   trackId: number;
@@ -34,6 +35,8 @@ const play = () => {
     player.track = track.value;
   }
 };
+
+console.log(player.playList);
 </script>
 
 <template>
@@ -43,7 +46,7 @@ const play = () => {
   >
     <div class="flex gap-2">
       <span v-if="order">{{ order }}.</span>
-      <di v>
+      <di v-if="track.type === 'surah'">
         <span class="font-semibold">
           {{ track.title }}
         </span>
@@ -51,6 +54,11 @@ const play = () => {
           {{ track.subtitle }}
         </p>
       </di>
+      <div v-else>
+        <p class="pl-4">
+          {{ props.content }}
+        </p>
+      </div>
     </div>
     <PlayButton :tracks="[track]" v-if="isCurrentTrack" />
   </div>

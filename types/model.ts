@@ -33,8 +33,10 @@ export type Track = {
 };
 
 export type PlayList = {
+  id: number;
   title: string;
   subtitle?: string;
+  content?: string;
   server_url: string;
   order: number;
   type: string;
@@ -82,19 +84,17 @@ export type Riwayat = {
 };
 
 export type HisnmuslimItem = {
-  ID: number;
-  TITLE: string;
-  AUDIO_URL: string;
-  TEXT: string;
+  id: number;
+  name: string;
+  url: string;
+  supplications: Supplication[];
 };
 
-export type HisnmuslimContentItem = {
-  ID: number;
-  ARABIC_TEXT: string;
-  LANGUAGE_ARABIC_TRANSLATED_TEXT: string;
-  TRANSLATED_TEXT: string;
-  REPEAT: number;
-  AUDIO: string;
+export type Supplication = {
+  id: number;
+  content: string;
+  repeat: number;
+  url: string;
 };
 
 export type Mosque = {

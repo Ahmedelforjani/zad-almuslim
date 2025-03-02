@@ -1,19 +1,35 @@
 <script setup lang="ts">
-import type { HisnmuslimItem } from "~/types/model";
+import type { Pagination, HisnmuslimItem } from "~/types/model";
 
-const { data: hisnmuslim, status } = await useAsyncData("hisnmuslim", () =>
-  useHttp().get<Record<string, HisnmuslimItem[]>>(
-    "https://www.hisnmuslim.com/api/ar/husn_ar.json"
-  )
+const route = useRoute();
+const search = ref(route.query.search?.toString() || "");
+const routeQuery = computed(() => route.query);
+
+const { data: hisnmuslim, status } = await useAsyncData(
+  "hisnmuslim",
+  () =>
+    useHttp().get<Pagination<HisnmuslimItem>>("/supplications", {
+      params: {
+        ...toValue(routeQuery),
+        per_page: 30,
+      },
+    }),
+  { watch: [routeQuery] }
 );
 
-const search = ref("");
-const items = computed(() => {
-  if (!hisnmuslim.value) return [];
-  return Object.values(hisnmuslim.value)?.[0]?.filter((item: HisnmuslimItem) =>
-    item.TITLE.includes(search.value)
-  );
-});
+debouncedWatch(
+  search,
+  () => {
+    navigateTo({
+      query: {
+        ...routeQuery.value,
+        page: 1,
+        search: search.value,
+      },
+    });
+  },
+  { debounce: 500 }
+);
 </script>
 
 <template>
@@ -45,33 +61,19 @@ const items = computed(() => {
       </span>
     </div>
     <GridView
-      v-if="items.length > 0"
-      :data="items"
+      v-if="hisnmuslim?.data"
+      :data="hisnmuslim.data"
+      :pagination="hisnmuslim.meta"
       :is-loading="status === 'pending'"
+      grid-class="lg:grid-cols-[repeat(auto-fill,minmax(250px,1fr))] grid-cols-[repeat(auto-fill,minmax(200px,1fr))]"
       class="mt-6"
-      grid-class="lg:grid-cols-[repeat(auto-fill,minmax(300px,1fr))] grid-cols-[repeat(auto-fill,minmax(200px,1fr))]"
     >
-      <template #item="{ value, index }">
-        <NuxtLink :to="`/hisnmuslim/${value.ID}`" class="group">
-          <Card
-            class="transition-all duration-300 shadow group-hover:scale-105 group-hover:shadow-lg"
-          >
-            <CardContent class="p-3">
-              <div
-                class="flex items-center gap-2 text-sm transition-all duration-300 lg:text-base group-hover:text-primary"
-              >
-                {{ index + 1 }}. {{ value.TITLE }}
-              </div>
-            </CardContent>
-          </Card>
-        </NuxtLink>
+      <template #item="{ value, order }">
+        <HisnmuslimItem :item="value" :order="order" />
       </template>
     </GridView>
-    <div
-      v-else-if="search.length > 0"
-      class="mt-6 text-lg font-medium text-center"
-    >
+    <!-- <div v-else class="mt-6 text-lg font-medium text-center">
       <p>لا توجد نتائج للبحث عن "{{ search }}"</p>
-    </div>
+    </div> -->
   </div>
 </template>

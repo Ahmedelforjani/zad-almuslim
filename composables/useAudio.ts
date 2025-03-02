@@ -44,13 +44,13 @@ export function useAudio(
     const nextTrack = playerStore.playList[currentTrackIndex.value];
 
     playerStore.track = {
-      id: nextTrack.order,
+      id: nextTrack.id,
       title: nextTrack.title,
       subtitle: nextTrack.subtitle,
       type: nextTrack.type,
       url: nextTrack.server_url,
       index: currentTrackIndex.value,
-    }; // Set the new track URL
+    };
     playing.value = true;
     el.autoplay = true;
   }
@@ -61,7 +61,7 @@ export function useAudio(
     if (currentTrackIndex.value < playerStore.playList.length - 1) {
       playTrack(currentTrackIndex.value + 1);
     } else {
-      playTrack(0); // Loop to first track if at the last track
+      playTrack(0);
     }
   }
 
@@ -71,7 +71,7 @@ export function useAudio(
     if (currentTrackIndex.value > 0) {
       playTrack(currentTrackIndex.value - 1);
     } else {
-      playTrack(playerStore.playList.length - 1); // Loop to last track if at the first track
+      playTrack(playerStore.playList.length - 1);
     }
   }
 

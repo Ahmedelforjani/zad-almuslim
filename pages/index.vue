@@ -10,7 +10,7 @@ const [{ data: broadcasts }, { data: lectures }, { data: reciters }] =
 </script>
 
 <template>
-  <div class="">
+  <div >
     <div class="flex items-center justify-between">
       <div class="space-y-1">
         <h2 class="flex items-center text-2xl font-semibold tracking-tight">

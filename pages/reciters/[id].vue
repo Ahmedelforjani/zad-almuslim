@@ -46,6 +46,7 @@ const play = () => {
     ([key, value]) => {
       const surahNumber = key.padStart(3, "0");
       return {
+        id: +key,
         title: `سورة ${value}`,
         subtitle: reciter.value?.name,
         server_url: `${riwaya.value?.server_url}${surahNumber}.mp3`,

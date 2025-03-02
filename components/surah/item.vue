@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { cn, zeroPad } from "~/lib/utils";
+import { zeroPad } from "~/lib/utils";
 import type { Reciter } from "~/types/model";
 
 const props = defineProps<{

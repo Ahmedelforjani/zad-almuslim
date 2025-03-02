@@ -3,6 +3,10 @@ const playerStore = usePlayerStore();
 const { track } = storeToRefs(playerStore);
 const { audio } = playerStore;
 
+const props = defineProps<{
+  displaySeekBar?: boolean | true;
+}>();
+
 const currentTimeRef = ref([audio.currentTime]);
 
 watchEffect(() => {
@@ -63,7 +67,9 @@ watch(currentTimeRef, (newTime) => {
     </div>
     <div
       class="text-sm text-muted-foreground flex gap-4"
-      v-if="track.type !== 'broadcast' && audio.duration"
+      v-if="
+        track.type !== 'broadcast' && audio.duration && props.displaySeekBar
+      "
     >
       <div class="flex items-center">
         {{ (audio.duration % 60).toFixed().padStart(2, "0") }}:

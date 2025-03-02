@@ -38,20 +38,22 @@ const { track, playList } = storeToRefs(usePlayerStore());
         </DrawerHeader>
         <div class="px-4 pb-12 lg:px-8">
           <div class="max-w-2xl mx-auto mt-6 space-y-6">
-            <AudioController />
+            <AudioController :displaySeekBar="true" />
             <!-- <VolumeController /> -->
             <div
               class="flex flex-col justify-center mt-6 divide-y-2 divide-muted/50"
             >
+              <!-- remove track-id -->
               <PlaylistItem
                 v-for="(item, index) in playList"
                 :key="index"
                 :order="index + 1"
-                :track-id="item.order"
+                :track-id="item.id"
                 :link="item.server_url"
                 :subtitle="item.subtitle"
                 :type="track.type"
                 :title="item.title"
+                :content="item.content"
                 :track-index="index"
               />
             </div>
