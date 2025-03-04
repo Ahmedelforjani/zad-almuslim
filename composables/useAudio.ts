@@ -81,6 +81,16 @@ export function useAudio(
     }
   });
 
+  if (import.meta.client) {
+    const player = localStorage.getItem("player");
+    if (player) {
+      const playerData = JSON.parse(player);
+      if (playerData.volume || playerData.volume === 0) {
+        volume.value = playerData.volume;
+      }
+    }
+  }
+
   watchEffect(() => {
     if (!document) return;
 
@@ -89,6 +99,13 @@ export function useAudio(
 
     // Finally, load the new sources.
     el.load();
+    const player = localStorage.getItem("player");
+    if (player) {
+      const playerData = JSON.parse(player);
+      if (playerData.currentTime) {
+        currentTime.value = playerData.currentTime;
+      }
+    }
   });
 
   // Remove source error listeners
@@ -164,11 +181,18 @@ export function useAudio(
     }
   });
 
-  useEventListener(target, "timeupdate", () =>
+  useEventListener(target, "timeupdate", () => {
     ignoreCurrentTimeUpdates(
       () => (currentTime.value = toValue(target)!.currentTime)
-    )
-  );
+    );
+    if (import.meta.client) {
+      const playerSettings = localStorage.getItem("player") || "{}";
+      const parsedSettings = JSON.parse(playerSettings);
+      parsedSettings.currentTime = currentTime.value;
+      localStorage.setItem("player", JSON.stringify(parsedSettings));
+    }
+  });
+
   useEventListener(
     target,
     "durationchange",
@@ -221,6 +245,12 @@ export function useAudio(
 
     volume.value = el.volume;
     muted.value = el.muted;
+    if (import.meta.client) {
+      const playerSettings = localStorage.getItem("player") || "{}";
+      const parsedSettings = JSON.parse(playerSettings);
+      parsedSettings.volume = volume.value;
+      localStorage.setItem("player", JSON.stringify(parsedSettings));
+    }
   });
 
   return {

@@ -2,14 +2,9 @@
 const playerStore = usePlayerStore();
 const { audio } = playerStore;
 
-const sliderVolume = ref([audio.volume]);
-
-watchEffect(() => {
-  sliderVolume.value = [audio.volume];
-});
-
-watch(sliderVolume, (newSliderVolume) => {
-  audio.volume = newSliderVolume[0];
+const sliderVolume = computed({
+  get: () => [audio.volume],
+  set: (val) => (audio.volume = val[0]),
 });
 </script>
 
